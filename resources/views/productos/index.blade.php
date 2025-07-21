@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -135,7 +135,7 @@
 <div class="container">
     <div class="top-bar">
         <h1>Listado de Productos</h1>
-        <a href="{{ url('/productos/crear') }}" class="add-button">+ Agregar Producto</a>
+        <a href="{{ url('/productos/create') }}" class="add-button">+ Agregar Producto</a>
     </div>
 
     <table>
@@ -152,12 +152,12 @@
         <tbody>
             @foreach ($productos as $producto)
                 <tr id="row-{{ $producto['id'] }}">
-                    <td>{{ $producto['titulo'] }}</td>
-                    <td>{{ $producto['autor'] }}</td>
-                    <td>{{ $producto['editorial'] }}</td>
+                    <td>{{ $producto['title'] }}</td>
+                    <td>{{ $producto['author'] }}</td>
+                    <td>{{ $producto['publisher'] }}</td>
                     <td>{{ $producto['stock'] }}</td>
                     <td>
-                        <a href="{{ url('/productos/' . $producto['id'] . '/editar') }}" class="action-button">Editar</a>
+                        <a href="{{ url('/productos/' . $producto['id'] . '/edit') }}" class="action-button">Editar</a>
                     </td>
                     <td>
                         <span class="delete-icon" onclick="confirmDelete({{ $producto['id'] }})">&#128465;</span>
@@ -195,15 +195,14 @@
     function deleteProduct() {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    fetch(`http://127.0.0.1:8000/api/productos/${selectedId}`, {
-    method: 'DELETE',
-    headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken,  // solo si es necesario, si no puedes quitarlo
-        'Accept': 'application/json',
-    }
-    })
-
+        fetch(`http://127.0.0.1:8000/api/products/${selectedId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,  // solo si es necesario, si no puedes quitarlo
+                'Accept': 'application/json',
+            }
+        })
         .then(response => {
             if (response.ok) {
                 // Eliminar fila de la tabla

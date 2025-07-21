@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class ProductoController extends Controller
+class ProductController extends Controller
 {
     protected $apiUrl;
 
@@ -23,12 +23,12 @@ class ProductoController extends Controller
         return view('productos.index', compact('productos'));
     }
 
-    public function crear()
+    public function create()
     {
         return view('productos.crear');
     }
 
-    public function guardar(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'title' => 'required',
@@ -46,7 +46,7 @@ class ProductoController extends Controller
         return back()->withErrors('Error al agregar el producto');
     }
 
-    public function editar($id)
+    public function edit($id)
     {
         $response = Http::get("{$this->apiUrl}/{$id}");
 
@@ -59,7 +59,7 @@ class ProductoController extends Controller
         return view('productos.modificar', compact('producto'));
     }
 
-    public function actualizar(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'title' => 'required',

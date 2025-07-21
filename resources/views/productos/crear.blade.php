@@ -86,17 +86,17 @@
 
         <form method="POST" action="{{ url('/productos') }}">
             @csrf
-            <label for="titulo">Título:</label>
-            <input type="text" id="titulo" name="titulo" required>
+            <label for="title">Título:</label>
+            <input type="text" id="title" name="title" value="{{ old('title') }}" required>
 
-            <label for="autor">Autor:</label>
-            <input type="text" id="autor" name="autor" required>
+            <label for="author">Autor:</label>
+            <input type="text" id="author" name="author" value="{{ old('author') }}" required>
 
-            <label for="editorial">Editorial:</label>
-            <input type="text" id="editorial" name="editorial" required>
+            <label for="publisher">Editorial:</label>
+            <input type="text" id="publisher" name="publisher" value="{{ old('publisher') }}" required>
 
             <label for="stock">Stock:</label>
-            <input type="number" id="stock" name="stock" min="0" required>
+            <input type="number" id="stock" name="stock" min="0" value="{{ old('stock') }}" required>
 
             <button type="submit" class="btn">Guardar Producto</button>
         </form>

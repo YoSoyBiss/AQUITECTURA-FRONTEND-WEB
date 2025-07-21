@@ -69,17 +69,17 @@
             @csrf
             @method('PUT')
 
-            <label for="titulo">Título:</label>
-            <input type="text" name="titulo" value="{{ old('titulo', $producto['titulo']) }}" required>
+            <label for="title">Título:</label>
+            <input type="text" id="title" name="title" value="{{ old('title', $producto['title']) }}" required>
 
-            <label for="autor">Autor:</label>
-            <input type="text" name="autor" value="{{ old('autor', $producto['autor']) }}" required>
+            <label for="author">Autor:</label>
+            <input type="text" id="author" name="author" value="{{ old('author', $producto['author']) }}" required>
 
-            <label for="editorial">Editorial:</label>
-            <input type="text" name="editorial" value="{{ old('editorial', $producto['editorial']) }}" required>
+            <label for="publisher">Editorial:</label>
+            <input type="text" id="publisher" name="publisher" value="{{ old('publisher', $producto['publisher']) }}" required>
 
             <label for="stock">Stock:</label>
-            <input type="number" name="stock" value="{{ old('stock', $producto['stock']) }}" min="0" required>
+            <input type="number" id="stock" name="stock" value="{{ old('stock', $producto['stock']) }}" min="0" required>
 
             <button type="submit">Actualizar Producto</button>
         </form>
