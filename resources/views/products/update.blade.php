@@ -65,26 +65,26 @@
     <div class="container">
         <h1>Editar Producto</h1>
 
-        <form action="{{ url('/productos/' . $producto['id']) }}" method="POST">
+        <form action="{{ url('/products/' . $product['id']) }}" method="POST">
             @csrf
             @method('PUT')
 
             <label for="title">Título:</label>
-            <input type="text" id="title" name="title" value="{{ old('title', $producto['title']) }}" required>
+            <input type="text" id="title" name="title" value="{{ old('title', $product['title']) }}" required>
 
             <label for="author">Autor:</label>
-            <input type="text" id="author" name="author" value="{{ old('author', $producto['author']) }}" required>
+            <input type="text" id="author" name="author" value="{{ old('author', $product['author']) }}" required>
 
             <label for="publisher">Editorial:</label>
-            <input type="text" id="publisher" name="publisher" value="{{ old('publisher', $producto['publisher']) }}" required>
+            <input type="text" id="publisher" name="publisher" value="{{ old('publisher', $product['publisher']) }}" required>
 
             <label for="stock">Stock:</label>
-            <input type="number" id="stock" name="stock" value="{{ old('stock', $producto['stock']) }}" min="0" required>
+            <input type="number" id="stock" name="stock" value="{{ old('stock', $product['stock']) }}" min="0" required>
 
             <button type="submit">Actualizar Producto</button>
         </form>
 
-        <a href="{{ url('/productos') }}" class="back-link">← Volver al listado</a>
+        <a href="{{ url('/products') }}" class="back-link">← Volver al listado</a>
     </div>
 
 </body>

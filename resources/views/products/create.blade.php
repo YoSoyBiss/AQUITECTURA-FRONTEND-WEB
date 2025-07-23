@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4e3d7; /* color café claro */
+            background-color: #f4e3d7;
             padding: 40px;
         }
 
@@ -84,7 +84,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ url('/productos') }}">
+        <form method="POST" action="{{ url('/products') }}">
             @csrf
             <label for="title">Título:</label>
             <input type="text" id="title" name="title" value="{{ old('title') }}" required>
@@ -101,7 +101,7 @@
             <button type="submit" class="btn">Guardar Producto</button>
         </form>
 
-        <a href="{{ url('/productos') }}" class="back-link">← Volver al listado</a>
+        <a href="{{ url('/products') }}" class="back-link">← Volver al listado</a>
     </div>
 
 </body>

@@ -1,3 +1,5 @@
+<!-- resources/views/products/index.blade.php -->
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,7 +7,7 @@
     <title>Listado de Productos</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
-        /* [Estilos se quedan igual que los que ya tienes] */
+        /* Tus estilos permanecen iguales */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4e3d7;
@@ -135,7 +137,7 @@
 <div class="container">
     <div class="top-bar">
         <h1>Listado de Productos</h1>
-        <a href="{{ url('/productos/create') }}" class="add-button">+ Agregar Producto</a>
+        <a href="{{ route('products.create') }}" class="add-button">+ Agregar Producto</a>
     </div>
 
     <table>
@@ -150,17 +152,17 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($productos as $producto)
-                <tr id="row-{{ $producto['id'] }}">
-                    <td>{{ $producto['title'] }}</td>
-                    <td>{{ $producto['author'] }}</td>
-                    <td>{{ $producto['publisher'] }}</td>
-                    <td>{{ $producto['stock'] }}</td>
+            @foreach ($products as $product)
+                <tr id="row-{{ $product['id'] }}">
+                    <td>{{ $product['title'] }}</td>
+                    <td>{{ $product['author'] }}</td>
+                    <td>{{ $product['publisher'] }}</td>
+                    <td>{{ $product['stock'] }}</td>
                     <td>
-                        <a href="{{ url('/productos/' . $producto['id'] . '/edit') }}" class="action-button">Editar</a>
+                        <a href="{{ route('products.edit', $product['id']) }}" class="action-button">Editar</a>
                     </td>
                     <td>
-                        <span class="delete-icon" onclick="confirmDelete({{ $producto['id'] }})">&#128465;</span>
+                        <span class="delete-icon" onclick="confirmDelete({{ $product['id'] }})">&#128465;</span>
                     </td>
                 </tr>
             @endforeach
@@ -195,17 +197,15 @@
     function deleteProduct() {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        fetch(`http://127.0.0.1:8000/api/products/${selectedId}`, {
+        fetch(`{{ env('API_URL', 'http://127.0.0.1:8000') }}/api/products/${selectedId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken,  // solo si es necesario, si no puedes quitarlo
                 'Accept': 'application/json',
             }
         })
         .then(response => {
             if (response.ok) {
-                // Eliminar fila de la tabla
                 const row = document.getElementById(`row-${selectedId}`);
                 if (row) row.remove();
                 closeModal();
