@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -17,6 +18,14 @@ class ProductController extends Controller
     public function index()
     {
         $response = Http::get($this->apiUrl);
+
+        if (!$response->successful()) {
+            Log::error('Error al obtener productos', [
+                'url' => $this->apiUrl,
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+        }
 
         $productos = $response->successful() ? $response->json()['products'] : [];
 
@@ -40,8 +49,15 @@ class ProductController extends Controller
         $response = Http::post($this->apiUrl, $request->all());
 
         if ($response->successful()) {
+            Log::info('Producto creado con éxito', $request->only(['title', 'author']));
             return redirect('/productos')->with('success', 'Producto agregado correctamente.');
         }
+
+        Log::error('Error al crear producto', [
+            'data' => $request->all(),
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
 
         return back()->withErrors('Error al agregar el producto');
     }
@@ -51,6 +67,11 @@ class ProductController extends Controller
         $response = Http::get("{$this->apiUrl}/{$id}");
 
         if (!$response->successful()) {
+            Log::error("Error al obtener producto ID: $id", [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+
             return redirect('/productos')->withErrors('No se pudo obtener el producto.');
         }
 
@@ -71,8 +92,15 @@ class ProductController extends Controller
         $response = Http::put("{$this->apiUrl}/{$id}", $request->all());
 
         if ($response->successful()) {
+            Log::info("Producto actualizado ID: $id", $request->only(['title', 'author']));
             return redirect('/productos')->with('success', 'Producto actualizado correctamente.');
         }
+
+        Log::error("Error al actualizar producto ID: $id", [
+            'data' => $request->all(),
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
 
         return back()->withErrors('Error al actualizar el producto')->withInput();
     }
@@ -82,8 +110,14 @@ class ProductController extends Controller
         $response = Http::delete("{$this->apiUrl}/{$id}");
 
         if ($response->successful()) {
+            Log::info("Producto eliminado ID: $id");
             return redirect('/productos')->with('success', 'Producto eliminado correctamente.');
         }
+
+        Log::error("Error al eliminar producto ID: $id", [
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
 
         return back()->withErrors('Error al eliminar el producto');
     }
