@@ -1,28 +1,25 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductwebController;
 
-// Home page
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Show all products
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+// Listar productos (llama a la API para obtener productos)
+Route::get('/products', [ProductWebController::class, 'index'])->name('products.index');
 
-// Show the form to create a new product
-Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+// Mostrar formulario para crear un producto
+Route::get('/products/create', [ProductWebController::class, 'create'])->name('products.create');
 
-// Store a new product
-Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+// Guardar nuevo producto (envía datos a la API)
+Route::post('/products', [ProductWebController::class, 'store'])->name('products.store');
 
-// Show the form to edit a product
-Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
+// Mostrar formulario para editar producto específico
+Route::get('/products/{id}/edit', [ProductWebController::class, 'edit'])->name('products.edit');
 
-// Update an existing product
-Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
+// Actualizar producto específico (envía datos a la API)
+Route::put('/products/{id}', [ProductWebController::class, 'update'])->name('products.update');
 
-// Delete a product
-Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
-
+// Eliminar producto específico (envía petición a la API)
+Route::delete('/products/{id}', [ProductWebController::class, 'destroy'])->name('products.destroy');
