@@ -9,12 +9,28 @@ class ProductWebController extends Controller
 {
     private $apiBase = 'http://127.0.0.1:8000/api/products'; // API base URL
 
-    public function index()
-    {
-        $response = Http::get($this->apiBase);
-        $products = $response->json();
-        return view('products.index', compact('products'));
+   public function index()
+{
+    $response = Http::get($this->apiBase);
+
+    if (! $response->successful()) {
+        // You can log it, show a friendly error, etc.
+        // For quick debugging:
+        // dd($response->status(), $response->body());
+        return view('products.index', ['products' => []])
+            ->withErrors(['api' => 'Could not fetch products from API (status: '.$response->status().')']);
     }
+
+    $products = $response->json();
+
+    // Ensure it's an array
+    if (!is_array($products)) {
+        $products = [];
+    }
+
+    return view('products.index', compact('products'));
+}
+
 
     public function create()
     {

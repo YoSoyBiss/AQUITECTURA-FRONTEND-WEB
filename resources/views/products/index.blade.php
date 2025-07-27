@@ -75,21 +75,26 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($products as $product)
-                <tr id="row-{{ $product['id'] }}">
-                    <td>{{ $product['title'] }}</td>
-                    <td>{{ $product['author'] }}</td>
-                    <td>{{ $product['publisher'] }}</td>
-                    <td>{{ $product['stock'] }}</td>
-                    <td>
-                        <a href="{{ route('products.edit', $product['id']) }}" class="action-button">Editar</a>
-                    </td>
-                    <td>
-                        <span class="delete-icon" onclick="confirmDelete({{ $product['id'] }})">&#128465;</span>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
+@forelse ($products as $product)
+    <tr id="row-{{ $product['id'] }}">
+        <td>{{ $product['title'] }}</td>
+        <td>{{ $product['author'] }}</td>
+        <td>{{ $product['publisher'] }}</td>
+        <td>{{ $product['stock'] }}</td>
+        <td>
+            <a href="{{ route('products.edit', $product['id']) }}" class="action-button">Editar</a>
+        </td>
+        <td>
+            <span class="delete-icon" onclick="confirmDelete({{ $product['id'] }})">&#128465;</span>
+        </td>
+    </tr>
+@empty
+    <tr>
+        <td colspan="6">No products found (or API unreachable).</td>
+    </tr>
+@endforelse
+</tbody>
+
     </table>
 </div>
 
