@@ -37,7 +37,7 @@ class ProductWebController extends Controller
         return view('products.create');
     }
 
-    public function store(Request $request)
+  public function store(Request $request)
 {
     $validated = $request->validate([
         'title' => 'required|string|max:255',
@@ -46,9 +46,21 @@ class ProductWebController extends Controller
         'stock' => 'required|integer|min:0'
     ]);
 
-    Http::post($this->apiBase, $validated);
+    $response = Http::post($this->apiBase, $validated);
+
+    if ($response->failed()) {
+        // Si la API devuelve errores de validación (422), puedes obtenerlos así:
+       $apiErrors = $response->json('errors') ?? ['api' => ['Unknown error while saving the product.']];
+
+        // Redirige con errores de vuelta al formulario
+        return back()
+            ->withErrors($apiErrors)
+            ->withInput(); // mantiene los valores ingresados
+    }
+
     return redirect()->route('products.index');
 }
+
 
     public function edit($id)
     {

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Agregar Producto</title>
+    <title>Add Product</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -72,13 +72,13 @@
 <body>
 
     <div class="container">
-        <h1>Agregar Producto</h1>
+        <h1>Add Product</h1>
 
         @if ($errors->any())
             <div class="error">
                 <ul>
                     @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                        <li>{{ is_array($error) ? implode(', ', $error) : $error }}</li>
                     @endforeach
                 </ul>
             </div>
@@ -86,22 +86,22 @@
 
         <form method="POST" action="{{ url('/products') }}">
             @csrf
-            <label for="title">Título:</label>
+            <label for="title">Title:</label>
             <input type="text" id="title" name="title" value="{{ old('title') }}" required>
 
-            <label for="author">Autor:</label>
+            <label for="author">Author:</label>
             <input type="text" id="author" name="author" value="{{ old('author') }}" required>
 
-            <label for="publisher">Editorial:</label>
+            <label for="publisher">Publisher:</label>
             <input type="text" id="publisher" name="publisher" value="{{ old('publisher') }}" required>
 
             <label for="stock">Stock:</label>
             <input type="number" id="stock" name="stock" min="0" value="{{ old('stock') }}" required>
 
-            <button type="submit" class="btn">Guardar Producto</button>
+            <button type="submit" class="btn">Save Product</button>
         </form>
 
-        <a href="{{ url('/products') }}" class="back-link">← Volver al listado</a>
+        <a href="{{ url('/products') }}" class="back-link">← Back to product list</a>
     </div>
 
 </body>
