@@ -1,0 +1,108 @@
+/* Fondo general */
+body {
+    background-color: #f2c7cc;
+    background-image: url('/books-pattern.png'); /* Asegúrate de que exista en public/ */
+    background-repeat: repeat;
+    background-position: center;
+    background-size: contain;
+    image-rendering: pixelated;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenedor del formulario */
+.login-container {
+    background-color: #b39279;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    text-align: center;
+}
+
+/* Título */
+.login-container h2 {
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 25px;
+}
+
+/* Etiquetas */
+.login-container label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Campos de entrada */
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Botón */
+.btn-submit {
+    margin-top: 25px;
+    padding: 10px 20px;
+    width: 100%;
+    border: none;
+    border-radius: 20px;
+    background-color: #005daa;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #004b8a;
+}
+
+/* Enlace de registro */
+.register-link {
+    margin-top: 20px;
+}
+
+.register-link a {
+    color: #330066;
+    text-decoration: underline;
+}
+.popup-error, .popup-success {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 25px;
+    border-radius: 10px;
+    color: white;
+    z-index: 9999;
+    font-weight: bold;
+    animation: fadeout 5s forwards;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.popup-error {
+    background-color: #e74c3c;
+}
+
+.popup-success {
+    background-color: #2ecc71;
+}
+
+@keyframes fadeout {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}

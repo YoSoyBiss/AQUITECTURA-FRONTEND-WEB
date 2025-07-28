@@ -1,0 +1,144 @@
+/* Fondo general */
+body {
+    background-color: #f2c7cc;
+    background-image: url('/butterfly-pattern.png'); /* Asegúrate que esté en public/ */
+    background-repeat: repeat;
+    background-position: center;
+    background-size: contain;
+    image-rendering: pixelated;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenedor del formulario */
+.register-container {
+    background-color: #b39279;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+    width: 400px;
+}
+
+/* Título */
+.register-container h2 {
+    margin-bottom: 25px;
+    color: #fff;
+    font-size: 24px;
+    text-align: center;
+}
+
+/* Etiquetas */
+.register-container label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Campos de texto */
+.register-container input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Contenedor de botones */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+/* Botones */
+.register-container button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-return {
+    background-color: #c0b1a2;
+    color: #333;
+}
+
+.btn-return:hover {
+    background-color: #a89888;
+}
+
+.btn-submit {
+    background-color: #005daa;
+    color: white;
+}
+
+.btn-submit:hover {
+    background-color: #004b8a;
+}
+
+/* Popup */
+.popup {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 30px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 15px;
+    color: #fff;
+    z-index: 9999;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    animation: fadeOut 4s ease-in-out forwards;
+}
+
+.popup.success {
+    background-color: #4caf50;
+}
+
+.popup.error {
+    background-color: #f44336;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}
+.popup-error, .popup-success {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 25px;
+    border-radius: 10px;
+    color: white;
+    z-index: 9999;
+    font-weight: bold;
+    animation: fadeout 5s forwards;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.popup-error {
+    background-color: #e74c3c;
+}
+
+.popup-success {
+    background-color: #2ecc71;
+}
+
+@keyframes fadeout {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}
