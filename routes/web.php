@@ -2,37 +2,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductWebController;
 use App\Http\Controllers\SalesController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\LoginController;
-
-// Rutas para productos
-Route::get('/productos', [ProductController::class, 'index']);
-Route::get('/productos/create', [ProductController::class, 'create']);
-Route::post('/productos', [ProductController::class, 'store']);
-Route::get('/productos/{id}/edit', [ProductController::class, 'edit']);
-Route::put('/productos/{id}', [ProductController::class, 'update']);
-Route::delete('/productos/{id}', [ProductController::class, 'destroy'])->name('productos.destroy');
-
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
-
-Route::view('/login', 'login')->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-
-Route::get('/register', function () {
-    return view('register');
-});
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register.form');
-Route::post('/register', [RegisterController::class, 'register'])->name('register');
-
-
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+use App\Http\Controllers\UserApiController;
 
 
 // Ruta raíz
@@ -64,10 +35,15 @@ Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.cre
 Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
 
 
+Route::get('/users', [UserApiController::class, 'index'])->name('users.index');
+Route::get('/users/create', [UserApiController::class, 'create'])->name('users.create');
+Route::post('/users', [UserApiController::class, 'store'])->name('users.store');
+Route::get('/users/edit/{id}', [UserApiController::class, 'edit'])->name('users.edit');
+Route::put('/users/{id}', [UserApiController::class, 'update'])->name('users.update');
+Route::delete('/users/{id}', [UserApiController::class, 'destroy'])->name('users.destroy');
 
-Route::get('/users', [UserController::class, 'index'])->name('users.indexusers');
-Route::get('/users/create', [UserController::class, 'create'])->name('users.createusers');
-Route::post('/users', [UserController::class, 'store'])->name('users.store');
-Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.editusers');
-Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
-Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+Route::get('/login', [UserApiController::class, 'showLogin'])->name('users.login');
+Route::post('/login', [UserApiController::class, 'login'])->name('users.login.submit');
+
+Route::get('/register', [UserApiController::class, 'create'])->name('users.register');
+Route::post('/register', [UserApiController::class, 'store'])->name('users.register.submit');

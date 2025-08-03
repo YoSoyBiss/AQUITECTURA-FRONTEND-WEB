@@ -67,34 +67,6 @@
       color: red;
       margin-bottom: 15px;
     }
-
-    #successModal {
-      display: none;
-      position: fixed;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -30%);
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      text-align: center;
-      z-index: 1000;
-    }
-
-    #successModal h2 {
-      color: green;
-    }
-
-    #successModal button {
-      background-color: #28a745;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -112,7 +84,7 @@
       </div>
     @endif
 
-    <form id="productForm" method="POST" action="{{ url('/products') }}">
+    <form method="POST" action="{{ url('/products') }}">
       @csrf
       <label for="title">Title:</label>
       <input type="text" id="title" name="title" value="{{ old('title') }}" required>
@@ -132,26 +104,5 @@
     <a href="{{ url('/products') }}" class="back-link">← Back to product list</a>
   </div>
 
-  <!-- Modal -->
-  <div id="successModal">
-    <h2>✅ Product added successfully</h2>
-    <button onclick="goToProducts()">Continue</button>
-  </div>
-
-  <script>
-    const form = document.getElementById('productForm');
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault(); // Bloquea el envío
-      document.getElementById('successModal').style.display = 'block';
-      setTimeout(() => {
-        form.submit(); // Envía tras mostrar modal
-      }, 1500); // Puedes ajustar el tiempo si quieres que sea más rápido o lento
-    });
-
-    function goToProducts() {
-      window.location.href = '/products';
-    }
-  </script>
 </body>
 </html>
