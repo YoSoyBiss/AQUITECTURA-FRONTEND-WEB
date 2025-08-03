@@ -2,50 +2,141 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Registro</title>
-  <style>/* estilos previos... */</style>
+  <title>Crear cuenta</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4e3d7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .register-container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(90, 62, 54, 0.2);
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      text-align: center;
+      color: #5a3e36;
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-weight: bold;
+      color: #5a3e36;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"] {
+      background-color: #8d6e63;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #795548;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .footer a {
+      color: #5a3e36;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
   <div class="register-container">
     <h2>Crear Cuenta</h2>
-    <form id="register-form">
-      <label for="name">Nombre:</label>
-      <input type="text" id="name" required>
 
-      <label for="email">Correo electrónico:</label>
-      <input type="email" id="email" required>
+    @if(session('error'))
+      <div class="error-message">{{ session('error') }}</div>
+    @endif
 
-      <label for="password">Contraseña:</label>
-      <input type="password" id="password" required>
+    @if ($errors->any())
+      <div class="error-message">
+        <ul>
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
 
-      <label for="password_confirmation">Confirme contraseña:</label>
-      <input type="password" id="password_confirmation" required>
+    <form method="POST" action="{{ route('register.submit') }}">
+      @csrf
 
-      <button type="submit">Crear Cuenta</button>
+      <label for="name">Nombre completo</label>
+      <div class="input-group">
+        <input type="text" name="name" id="name" value="{{ old('name') }}" required>
+      </div>
+
+      <label for="email">Correo electrónico</label>
+      <div class="input-group">
+        <input type="email" name="email" id="email" value="{{ old('email') }}" required>
+      </div>
+
+      <label for="password">Contraseña</label>
+      <div class="input-group">
+        <input type="password" name="password" id="password" required>
+      </div>
+
+      <label for="password_confirmation">Confirmar contraseña</label>
+      <div class="input-group">
+        <input type="password" name="password_confirmation" id="password_confirmation" required>
+      </div>
+
+      <button type="submit">Crear cuenta</button>
     </form>
-    <a href="/login"><button>Volver</button></a>
+
+    <div class="footer">
+      ¿Ya tienes cuenta? <a href="{{ route('users.login') }}">Inicia sesión</a>
+    </div>
   </div>
-  <script>
-    document.getElementById('register-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (password.value !== password_confirmation.value) return alert('Las contraseñas no coinciden');
-      const res = await fetch('http://localhost:3000/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: name.value,
-          email: email.value,
-          password: password.value
-        })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        alert('Registro exitoso. Ahora puedes iniciar sesión.');
-        window.location.href = '/login';
-      } else {
-        alert(data.message || 'Error al registrarse');
-      }
-    });
-  </script>
 </body>
 </html>

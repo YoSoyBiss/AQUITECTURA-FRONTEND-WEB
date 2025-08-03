@@ -46,8 +46,9 @@ Route::get('/users/edit/{id}', [UserApiController::class, 'edit'])->name('users.
 Route::put('/users/{id}', [UserApiController::class, 'update'])->name('users.update');
 Route::delete('/users/{id}', [UserApiController::class, 'destroy'])->name('users.destroy');
 
+// 🔐 Rutas de autenticación pública
+Route::get('/register', [UserApiController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [UserApiController::class, 'submitRegister'])->name('register.submit');
+
 Route::get('/login', [UserApiController::class, 'showLogin'])->name('users.login');
 Route::post('/login', [UserApiController::class, 'login'])->name('users.login.submit');
-
-Route::get('/register', [UserApiController::class, 'create'])->name('users.register');
-Route::post('/register', [UserApiController::class, 'store'])->name('users.register.submit');

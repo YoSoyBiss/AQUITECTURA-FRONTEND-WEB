@@ -10,11 +10,11 @@ class UserApiController extends Controller
     private $usersApi;
     private $authApi;
 
-    public function __construct()
-    {
-        $this->usersApi = env('USERS_API_URL', 'http://localhost:3000/api/users');
-        $this->authApi = env('AUTH_API_URL', 'http://localhost:3000/api/auth');
-    }
+public function __construct()
+{
+    $this->usersApi = env('USERS_API_URL', 'http://localhost:5000/api/users');
+    $this->authApi = env('AUTH_API_URL', 'http://localhost:5000/api/users');  // Cambiado a /api/users
+}
 
     public function index()
     {
@@ -50,23 +50,23 @@ class UserApiController extends Controller
         return view('users.login');
     }
 
-    public function login(Request $request)
-    {
-        $data = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
+   public function login(Request $request)
+{
+    $data = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|string',
+    ]);
 
-        $response = Http::post("{$this->authApi}/login", $data);
+    $response = Http::post("{$this->authApi}/login", $data);
 
-        if ($response->successful()) {
-            $token = $response->json('token');
-            session(['api_token' => $token]);
-            return redirect()->route('users.index')->with('success', 'Login exitoso');
-        }
-
-        return back()->withErrors(['error' => $response->json('message') ?? 'Credenciales incorrectas']);
+    if ($response->successful()) {
+        $token = $response->json('token');
+        session(['api_token' => $token]);
+        return redirect('/')->with('success', 'Login exitoso');
     }
+
+    return back()->withErrors(['error' => $response->json('message') ?? 'Credenciales incorrectas']);
+}
 
     public function edit($id)
 {
@@ -109,4 +109,35 @@ class UserApiController extends Controller
 
         return back()->withErrors(['error' => 'Error al eliminar usuario']);
     }
+
+    public function showRegisterForm()
+{
+    return view('users.register'); // <- Aquí va la vista bonita que hicimos
 }
+
+public function submitRegister(Request $request)
+{
+    $data = $request->validate([
+        'name' => 'required|string',
+        'email' => 'required|email',
+        'password' => 'required|string|min:6|confirmed',
+    ]);
+
+    // Enviar al backend Node.js (no agregar role)
+    $response = Http::post("{$this->authApi}/register", $data);
+
+    if ($response->successful()) {
+        return redirect()->route('users.login')->with('success', 'Registro exitoso');
+    }
+
+    \Log::error('Error al registrarse en API:', [
+        'status' => $response->status(),
+        'body' => $response->body(),
+        'json' => $response->json()
+    ]);
+
+    return back()->withErrors(['error' => $response->json('message') ?? 'Error al registrarse']);
+}
+
+}
+
