@@ -29,11 +29,15 @@ Route::put('/products/{id}', [ProductWebController::class, 'update'])->name('pro
 // Eliminar producto específico (envía petición a la API)
 Route::delete('/products/{id}', [ProductWebController::class, 'destroy'])->name('products.destroy');
 
-Route::get('/ventas', [App\Http\Controllers\SalesController::class, 'index'])->name('sales.indexsales');
-Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.createsales');
-
-Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
-
+Route::prefix('sales')->group(function () {
+    Route::get('/', [SalesController::class, 'index'])->name('sales.index');               // Ver lista de ventas
+    Route::get('/create', [SalesController::class, 'create'])->name('sales.createsales');  // Mostrar formulario
+    Route::post('/', [SalesController::class, 'store'])->name('sales.store');              // Guardar venta
+    Route::get('/{id}', [SalesController::class, 'show'])->name('sales.show');             // Ver una venta (opcional)
+    Route::get('/{id}/edit', [SalesController::class, 'edit'])->name('sales.edit');        // Editar venta (opcional)
+    Route::put('/{id}', [SalesController::class, 'update'])->name('sales.update');         // Actualizar venta
+    Route::delete('/{id}', [SalesController::class, 'destroy'])->name('sales.destroy');    // Eliminar venta
+});
 
 Route::get('/users', [UserApiController::class, 'index'])->name('users.index');
 Route::get('/users/create', [UserApiController::class, 'create'])->name('users.create');
