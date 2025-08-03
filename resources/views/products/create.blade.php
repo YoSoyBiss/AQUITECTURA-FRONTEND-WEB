@@ -98,6 +98,10 @@
       <label for="stock">Stock:</label>
       <input type="number" id="stock" name="stock" min="0" value="{{ old('stock') }}" required>
 
+      <label for="price">Price:</label>
+      <input type="number" id="price" name="price" value="{{ old('price') }}" min="0" required>
+
+
       <button type="submit" class="btn">Save Product</button>
     </form>
 

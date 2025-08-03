@@ -70,6 +70,7 @@
                 <th>Autor</th>
                 <th>Editorial</th>
                 <th>Stock</th>
+                <th>Precio</th>
                 <th>Acciones</th>
                 <th>Eliminar</th>
             </tr>
@@ -81,6 +82,7 @@
         <td>{{ $product['author'] }}</td>
         <td>{{ $product['publisher'] }}</td>
         <td>{{ $product['stock'] }}</td>
+        <td>{{ $product['price'] }}</td>
         <td>
             <a href="{{ route('products.edit', $product['id']) }}" class="action-button">Editar</a>
         </td>

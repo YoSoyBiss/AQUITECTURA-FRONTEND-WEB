@@ -82,6 +82,9 @@
       <label for="stock">Stock:</label>
       <input type="number" id="stock" name="stock" value="{{ old('stock', $product['stock']) }}" min="0" required>
 
+      <label for="price">Price:</label>
+      <input type="number" id="price" name="price" value="{{ old('price', $product['price']) }}" min="0" required>
+
       <button type="submit">Actualizar Producto</button>
     </form>
 

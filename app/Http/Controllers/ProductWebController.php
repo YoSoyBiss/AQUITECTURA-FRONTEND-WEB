@@ -9,58 +9,51 @@ class ProductWebController extends Controller
 {
     private $apiBase = 'http://127.0.0.1:8000/api/products'; // API base URL
 
-   public function index()
-{
-    $response = Http::get($this->apiBase);
+    public function index()
+    {
+        $response = Http::get($this->apiBase);
 
-    if (! $response->successful()) {
-        // You can log it, show a friendly error, etc.
-        // For quick debugging:
-        // dd($response->status(), $response->body());
-        return view('products.index', ['products' => []])
-            ->withErrors(['api' => 'Could not fetch products from API (status: '.$response->status().')']);
+        if (!$response->successful()) {
+            return view('products.index', ['products' => []])
+                ->withErrors(['api' => 'Could not fetch products from API (status: ' . $response->status() . ')']);
+        }
+
+        $products = $response->json();
+
+        if (!is_array($products)) {
+            $products = [];
+        }
+
+        return view('products.index', compact('products'));
     }
-
-    $products = $response->json();
-
-    // Ensure it's an array
-    if (!is_array($products)) {
-        $products = [];
-    }
-
-    return view('products.index', compact('products'));
-}
-
 
     public function create()
     {
         return view('products.create');
     }
 
-  public function store(Request $request)
-{
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'author' => 'required|string|max:255',
-        'publisher' => 'required|string|max:255',
-        'stock' => 'required|integer|min:0'
-    ]);
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'publisher' => 'required|string|max:255',
+            'stock' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0' // NUEVO CAMPO
+        ]);
 
-    $response = Http::post($this->apiBase, $validated);
+        $response = Http::post($this->apiBase, $validated);
 
-    if ($response->failed()) {
-        // Si la API devuelve errores de validación (422), puedes obtenerlos así:
-       $apiErrors = $response->json('errors') ?? ['api' => ['Unknown error while saving the product.']];
+        if ($response->failed()) {
+            $apiErrors = $response->json('errors') ?? ['api' => ['Unknown error while saving the product.']];
 
-        // Redirige con errores de vuelta al formulario
-        return back()
-            ->withErrors($apiErrors)
-            ->withInput(); // mantiene los valores ingresados
+            return back()
+                ->withErrors($apiErrors)
+                ->withInput();
+        }
+
+        return redirect()->route('products.index');
     }
-
-    return redirect()->route('products.index');
-}
-
 
     public function edit($id)
     {
@@ -68,18 +61,19 @@ class ProductWebController extends Controller
         return view('products.edit', compact('product'));
     }
 
-   public function update(Request $request, $id)
-{
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'author' => 'required|string|max:255',
-        'publisher' => 'required|string|max:255',
-        'stock' => 'required|integer|min:0'
-    ]);
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'publisher' => 'required|string|max:255',
+            'stock' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0' // NUEVO CAMPO
+        ]);
 
-    Http::put("{$this->apiBase}/{$id}", $validated);
-    return redirect()->route('products.index');
-}
+        Http::put("{$this->apiBase}/{$id}", $validated);
+        return redirect()->route('products.index');
+    }
 
     public function destroy($id)
     {
