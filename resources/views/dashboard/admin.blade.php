@@ -31,7 +31,8 @@
             margin-top: 30px;
         }
 
-        .menu a {
+        .menu a,
+        .menu button {
             background-color: #5a3e36;
             color: white;
             padding: 12px;
@@ -39,21 +40,38 @@
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
+            border: none;
+            display: block;
+            width: 100%;
+            cursor: pointer;
+            box-sizing: border-box;
         }
 
-        .menu a:hover {
+        .menu a:hover,
+        .menu button:hover {
             background-color: #3d2a24;
+        }
+
+        .menu form {
+            margin: 0;
+            padding: 0;
+            width: 100%; /* 🔧 Esto soluciona la diferencia de ancho */
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Bienvenido, {{ Auth::user()->name ?? 'Administrador' }}</h1>
+    <h1>Bienvenido, {{ session('user_name') ?? 'Administrador' }}</h1>
     <div class="menu">
         <a href="{{ route('products.index') }}">🔧 Gestión de Productos</a>
         <a href="{{ route('users.index') }}">👤 Gestión de Usuarios</a>
         <a href="{{ route('sales.index') }}">🛒 Gestión de Compras</a>
-        <a href="{{ route('logout') }}">🚪 Cerrar sesión</a>
+
+        {{-- 🔐 Logout uniforme --}}
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit">🚪 Cerrar sesión</button>
+        </form>
     </div>
 </div>
 </body>
