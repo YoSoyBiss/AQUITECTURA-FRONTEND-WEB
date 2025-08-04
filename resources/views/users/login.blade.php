@@ -6,7 +6,8 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4e3d7;
+      background: url('/books-pattern.png') no-repeat center center fixed;
+      background-size: cover;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -14,6 +15,7 @@
       margin: 0;
       padding: 20px;
     }
+
 
     .login-container {
       background: #ffffff;
