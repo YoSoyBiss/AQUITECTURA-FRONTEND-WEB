@@ -5,11 +5,19 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserApiController;
 
+//pdf ruta para descarga 
+
+Route::get('/reporte-ventas/pdf', [SalesController::class, 'descargarPDF'])->name('sales.report.pdf');
+
+
 
 // Ruta raíz
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/reporte-ventas', [SalesController::class, 'reporte'])->name('sales.reporte');
+
 
 // Listar productos (llama a la API para obtener productos)
 Route::get('/products', [ProductWebController::class, 'index'])->name('products.index');

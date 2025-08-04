@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Http;
 
 class SalesController extends Controller
@@ -109,4 +110,36 @@ class SalesController extends Controller
 
         return view('sales.showsales', compact('sale'));
     }
+
+
+    public function reporte()
+{
+    $response = Http::get('http://localhost:5000/api/sales');
+
+    if (!$response->successful()) {
+        return back()->withErrors(['error' => 'Error al obtener las ventas']);
+    }
+
+    $ventas = $response->json();
+
+    return view('sales.reporte', compact('ventas')); // O usa 'sales.report'
+}
+
+
+public function descargarPDF()
+{
+    $response = Http::get('http://localhost:5000/api/sales');
+
+    if (!$response->successful()) {
+        return back()->withErrors(['error' => 'Error al obtener las ventas']);
+    }
+
+    $ventas = $response->json();
+
+    // Generar la vista PDF
+    $pdf = Pdf::loadView('sales.report-pdf', compact('ventas'));
+
+    return $pdf->download('reporte_ventas.pdf');
+}
+
 }
