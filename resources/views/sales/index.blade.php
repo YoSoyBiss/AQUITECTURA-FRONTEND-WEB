@@ -59,6 +59,13 @@
             background-color: #218838;
         }
 
+        .btn-disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
         .alert-success {
             background-color: #d4edda;
             padding: 10px;
@@ -80,6 +87,9 @@
 <div class="container">
     <h1>Lista de Ventas</h1>
 
+    {{-- DEBUG TEMPORAL: Mostrar rol actual --}}
+    <p><strong>Rol actual:</strong> {{ session('user_role') ?? 'no definido' }}</p>
+
     @if (session('success'))
         <div class="alert-success">{{ session('success') }}</div>
     @endif
@@ -88,7 +98,12 @@
         <div class="alert-error">{{ $errors->first() }}</div>
     @endif
 
-    <a class="btn-create" href="{{ route('sales.createsales') }}">+ Crear Nueva Venta</a>
+    {{-- Botón habilitado solo si el usuario es admin --}}
+    @if (session('user_role') === 'admin')
+        <a class="btn-create" href="{{ route('sales.createsales') }}">+ Crear Nueva Venta</a>
+    @else
+        <button class="btn-create btn-disabled" disabled title="Solo administradores pueden crear ventas">+ Crear Nueva Venta</button>
+    @endif
 
     <table>
         <thead>
