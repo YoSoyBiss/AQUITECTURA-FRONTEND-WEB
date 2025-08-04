@@ -60,3 +60,13 @@ Route::post('/register', [UserApiController::class, 'submitRegister'])->name('re
 
 Route::get('/login', [UserApiController::class, 'showLogin'])->name('users.login');
 Route::post('/login', [UserApiController::class, 'login'])->name('users.login.submit');
+
+Route::post('/logout', [UserApiController::class, 'logout'])->name('logout');
+
+// 🔁 Redirección automática según rol
+Route::get('/dashboard', [UserApiController::class, 'redireccionarPorRol'])->name('dashboard.redirect');
+
+// 🧑‍🏫 Vistas individuales (si quieres probar directo)
+Route::view('/dashboard/admin', 'dashboard.admin')->name('dashboard.admin');
+Route::view('/dashboard/seller', 'dashboard.seller')->name('dashboard.seller');
+Route::view('/dashboard/consultant', 'dashboard.consultant')->name('dashboard.consultant');

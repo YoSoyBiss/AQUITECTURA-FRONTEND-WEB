@@ -60,10 +60,17 @@ public function __construct()
     $response = Http::post("{$this->authApi}/login", $data);
 
     if ($response->successful()) {
-        $token = $response->json('token');
-        session(['api_token' => $token]);
-        return redirect('/')->with('success', 'Login exitoso');
-    }
+    $user = $response->json('user');
+
+    session([
+        'api_token'  => $response->json('token'),  // si tienes token
+        'user_name'  => $user['name'],
+        'user_role'  => $user['role'],
+    ]);
+
+    return redirect()->route('dashboard.redirect');
+}
+
 
     return back()->withErrors(['error' => $response->json('message') ?? 'Credenciales incorrectas']);
 }
@@ -138,6 +145,33 @@ public function submitRegister(Request $request)
 
     return back()->withErrors(['error' => $response->json('message') ?? 'Error al registrarse']);
 }
+
+public function redireccionarPorRol()
+{
+    $rol = session('user_role');
+    $nombre = session('user_name');
+
+    if (!$rol) {
+        return redirect()->route('users.login')->withErrors(['error' => 'Debes iniciar sesión']);
+    }
+
+    return match ($rol) {
+        'admin'     => view('dashboard.admin', compact('nombre')),
+        'seller'    => view('dashboard.seller', compact('nombre')),
+        'consultant'=> view('dashboard.consultant', compact('nombre')),
+        default     => abort(403, 'Rol no reconocido'),
+    };
+}
+
+public function logout(Request $request)
+{
+    session()->forget('api_token');
+    session()->flush(); // Limpia todo
+
+    return redirect('/login')->with('success', 'Sesión cerrada');
+}
+
+
 
 }
 
