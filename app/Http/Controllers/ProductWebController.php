@@ -10,22 +10,35 @@ class ProductWebController extends Controller
     private $apiBase = 'http://127.0.0.1:8000/api/products'; // API base URL
 
     public function index()
-    {
-        $response = Http::get($this->apiBase);
+{
+    $response = Http::get($this->apiBase);
 
-        if (!$response->successful()) {
-            return view('products.index', ['products' => []])
-                ->withErrors(['api' => 'Could not fetch products from API (status: ' . $response->status() . ')']);
+    if (!$response->successful()) {
+        $products = [];
+
+        // Redireccionar según el rol incluso si falla la API
+        if (session('user_role') === 'consultant') {
+            return view('products.indexv', compact('products'))
+                ->withErrors(['api' => 'No se pudieron obtener los productos (estado: ' . $response->status() . ')']);
         }
 
-        $products = $response->json();
-
-        if (!is_array($products)) {
-            $products = [];
-        }
-
-        return view('products.index', compact('products'));
+        return view('products.index', compact('products'))
+            ->withErrors(['api' => 'No se pudieron obtener los productos (estado: ' . $response->status() . ')']);
     }
+
+    $products = $response->json();
+
+    if (!is_array($products)) {
+        $products = [];
+    }
+
+    // Mostrar vista según el rol
+    return match (session('user_role')) {
+        'consultant' => view('products.indexv', compact('products')),
+        default      => view('products.index', compact('products')),
+    };
+}
+
 
     public function create()
     {
