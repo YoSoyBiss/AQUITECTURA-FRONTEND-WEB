@@ -65,6 +65,7 @@
     <div class="menu">
         <a href="{{ route('products.index') }}">📦 Ver Productos</a>
         <a href="{{ route('sales.index') }}">📊 Ver Compras</a>
+        <a href="{{ route('sales.reporte') }}">📝 Ver reporte</a>
 
         {{-- 🔐 Logout uniforme --}}
         <form action="{{ route('logout') }}" method="POST">

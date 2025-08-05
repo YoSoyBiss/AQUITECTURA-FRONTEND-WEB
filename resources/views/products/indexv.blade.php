@@ -16,6 +16,12 @@
             color: #5a3e36;
             margin-bottom: 30px;
         }
+        .add-button {
+            display: inline-block; margin-bottom: 20px; padding: 10px 20px;
+            background-color: #8d6e63; color: white;
+            text-decoration: none; border-radius: 5px;
+            font-weight: bold; transition: background-color 0.3s ease;
+        }
 
         .container {
             max-width: 1000px;
@@ -63,7 +69,9 @@
 <body>
     <div class="container">
         <h1>Listado de Productos</h1>
-
+        <div class="top-bar">
+        <a href="{{ route('dashboard.redirect') }}" class="add-button" style="margin-right: auto;">🏠📚 Menu principal</a>
+    <div>
         <table>
             <thead>
                 <tr>

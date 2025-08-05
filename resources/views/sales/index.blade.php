@@ -73,6 +73,12 @@
             margin-bottom: 15px;
             border-radius: 4px;
         }
+        .add-button {
+            display: inline-block; margin-bottom: 20px; padding: 10px 20px;
+            background-color: #8d6e63; color: white;
+            text-decoration: none; border-radius: 5px;
+            font-weight: bold; transition: background-color 0.3s ease;
+        }
 
         .alert-error {
             background-color: #f8d7da;
@@ -104,7 +110,9 @@
     @else
         <button class="btn-create btn-disabled" disabled title="Solo administradores pueden crear ventas">+ Crear Nueva Venta</button>
     @endif
-
+    
+    <a href="{{ route('dashboard.redirect') }}" class="add-button" style="margin-right: auto;">🏠📚 Menu principal</a>
+    
     <table>
         <thead>
             <tr>

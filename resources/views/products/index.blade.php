@@ -12,7 +12,12 @@
             background-color: #f4e3d7;
             padding: 40px;
         }
-        h1 { text-align: center; color: #5a3e36; }
+       h1 {
+            text-align: center;
+            color: #5a3e36;
+            margin-bottom: 10px;
+        }
+
         .container {
             max-width: 1000px; margin: auto; background: #fff;
             padding: 30px; border-radius: 10px;
@@ -58,10 +63,12 @@
 </head>
 <body>
 <div class="container">
+    <h1>Listado de Productos</h1>
     <div class="top-bar">
-        <h1>Listado de Productos</h1>
-        <a href="{{ route('products.create') }}" class="add-button">+ Agregar Producto</a>
-    </div>
+    <a href="{{ route('dashboard.redirect') }}" class="add-button" style="margin-right: auto;">🏠📚 Menu principal</a>
+    <a href="{{ route('products.create') }}" class="add-button">+ Agregar Producto</a>
+</div>
+
 
     <table>
         <thead>
