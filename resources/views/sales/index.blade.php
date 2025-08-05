@@ -105,14 +105,14 @@
     @endif
 
     {{-- Botón habilitado solo si el usuario es admin --}}
-    @if (session('user_role') === 'admin')
+    @if (session('user_role') === 'admin' || session('user_role') === 'seller')
         <a class="btn-create" href="{{ route('sales.createsales') }}">+ Crear Nueva Venta</a>
     @else
         <button class="btn-create btn-disabled" disabled title="Solo administradores pueden crear ventas">+ Crear Nueva Venta</button>
     @endif
     
     <a href="{{ route('dashboard.redirect') }}" class="add-button" style="margin-right: auto;">🏠📚 Menu principal</a>
-    
+
     <table>
         <thead>
             <tr>
