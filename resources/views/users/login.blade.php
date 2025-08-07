@@ -6,7 +6,8 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: url('/books-pattern.png') no-repeat center center fixed;
+      background-color: #f4e3d7;
+      background: url('/books.png') no-repeat center center fixed;
       background-size: cover;
       display: flex;
       align-items: center;
@@ -16,52 +17,55 @@
       padding: 20px;
     }
 
-
     .login-container {
-      background: #ffffff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(90, 62, 54, 0.2);
+      background: url('/pergamino2.png') no-repeat center center fixed;
+      background-size: 600px auto;
+      padding: 80px 80px;
+      border-radius: 15px;
+      box-shadow: 0 10px 50px rgba(64, 50, 100, 0.3);
       width: 100%;
-      max-width: 400px;
+      max-width: 500px;
       box-sizing: border-box;
     }
 
     h2 {
       text-align: center;
       color: #5a3e36;
-      margin-bottom: 25px;
+      font-size: 32px;
+      margin-bottom: 30px;
     }
 
     label {
       font-weight: bold;
       color: #5a3e36;
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      font-size: 16px;
     }
 
     .input-group {
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .input-group input {
       width: 100%;
-      padding: 10px;
+      padding: 14px;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 8px;
+      font-size: 15px;
       box-sizing: border-box;
     }
 
     button[type="submit"] {
       background-color: #8d6e63;
       color: white;
-      padding: 12px;
+      padding: 14px;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
       width: 100%;
-      margin-top: 5px;
+      font-size: 16px;
       transition: background-color 0.3s ease;
     }
 
@@ -71,8 +75,8 @@
 
     .footer {
       text-align: center;
-      margin-top: 20px;
-      font-size: 14px;
+      margin-top: 25px;
+      font-size: 15px;
     }
 
     .footer a {
@@ -88,7 +92,7 @@
     .error-message {
       color: red;
       font-size: 14px;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
   </style>
 </head>
@@ -107,7 +111,7 @@
       </div>
     @endif
 
-    {{-- Mensajes de sesión (por ejemplo éxito o error custom) --}}
+    {{-- Mensajes de sesión --}}
     @if (session('error'))
       <div class="error-message">{{ session('error') }}</div>
     @endif

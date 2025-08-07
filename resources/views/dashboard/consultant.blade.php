@@ -3,59 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard Consultor</title>
+
+    <!-- Fuente Jacquard 24 -->
+    <link href="https://fonts.googleapis.com/css2?family=Jacquard+24&display=swap" rel="stylesheet">
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            background: #f4e3d7;
-            padding: 20px;
+            background-color: #f4e3d7;
+            background-image: url('/shadowthre.png'), url('/shadowthre.png'), url('/shadow2.png');
+            background-repeat: no-repeat;
+            background-position: 100% center, 10% center, 3% 100%;
+            background-size: 600px auto, 500px, 400px;
         }
 
         .container {
-            background: white;
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+            border: 10px solid #8d6e63;
+            border-image: url('/border-frame.png') 10 stretch;
+            padding: 15px;
+            border-radius: 40px;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         }
 
         h1 {
+            font-family: 'Jacquard 24', cursive;
+            font-size: 72px;
+            color: #000;
+            margin-bottom: 50px;
             text-align: center;
-            color: #333;
         }
 
         .menu {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-top: 30px;
+            gap: 30px;
+            align-items: center;
         }
 
-        .menu a,
-        .menu button {
-            background-color: #5a3e36;
-            color: white;
-            padding: 12px;
-            text-align: center;
+        .menu-item {
+            display: flex;
+            align-items: center;
+            background-color: #f2f2f2;
+            padding: 15px 30px;
             border-radius: 5px;
+            width: 350px;
             text-decoration: none;
+            color: #000;
             font-weight: bold;
-            border: none;
-            display: block;
-            width: 100%;
-            cursor: pointer;
-            box-sizing: border-box;
+            font-size: 22px;
+            transition: background 0.3s;
+            justify-content: center;
         }
 
-        .menu a:hover,
-        .menu button:hover {
-            background-color: #3d2a24;
+        .menu-item img {
+            width: 40px;
+            margin-right: 15px;
         }
 
-        .menu form {
+        .menu-item:hover {
+            background-color: #ddd;
+        }
+
+        form {
             margin: 0;
-            padding: 0;
-            width: 100%;
+        }
+
+        button.menu-item {
+            border: none;
+            cursor: pointer;
+            background-color: #f2f2f2;
+            font: inherit;
+        }
+
+        button.menu-item:hover {
+            background-color: #ddd;
         }
     </style>
 </head>
@@ -63,14 +91,22 @@
 <div class="container">
     <h1>Bienvenido, {{ session('user_name') ?? 'Consultor' }}</h1>
     <div class="menu">
-        <a href="{{ route('products.index') }}">📦 Ver Productos</a>
-        <a href="{{ route('sales.index') }}">📊 Ver Compras</a>
-        <a href="{{ route('sales.reporte') }}">📝 Ver reporte</a>
+        <a href="{{ route('products.index') }}" class="menu-item">
+            <img src="/prodc.png" alt="Productos"> Gestión de Productos
+        </a>
+        <a href="{{ route('sales.index') }}" class="menu-item">
+            <img src="/car.png" alt="Compras"> Gestión de Compras
+        </a>
+        <a href="{{ route('sales.reporte') }}" class="menu-item">
+            <img src="/reporte.png" alt="Reporte"> Ver Reporte
+        </a>
 
-        {{-- 🔐 Logout uniforme --}}
+        {{-- Logout --}}
         <form action="{{ route('logout') }}" method="POST">
             @csrf
-            <button type="submit">🚪 Cerrar sesión</button>
+            <button type="submit" class="menu-item">
+                <img src="/door.png" alt="Cerrar sesión"> Cerrar sesión
+            </button>
         </form>
     </div>
 </div>
