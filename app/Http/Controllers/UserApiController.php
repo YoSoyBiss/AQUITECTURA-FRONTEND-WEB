@@ -23,27 +23,34 @@ public function __construct()
         return view('users.index', compact('users'));
     }
 
-    public function create()
-    {
-        return view('users.create');
+  public function create()
+{
+    $rolesResponse = Http::get(env('ROLES_API_URL', 'http://localhost:5000/api/roles'));
+
+    $roles = $rolesResponse->successful() ? $rolesResponse->json() : [];
+
+    return view('users.create', compact('roles'));
+}
+
+
+   public function store(Request $request)
+{
+    $data = $request->validate([
+        'name' => 'required|string',
+        'email' => 'required|email',
+        'password' => 'required|string|min:6|confirmed',
+        'role' => 'required|string'  // Agregado
+    ]);
+
+    $response = Http::post("{$this->usersApi}/register", $data);
+
+    if ($response->successful()) {
+        return redirect()->route('users.index')->with('success', 'Usuario creado');
     }
 
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
+    return back()->withErrors(['error' => $response->json('message') ?? 'Error en la API']);
+}
 
-        $response = Http::post("{$this->usersApi}/register", $data);
-
-        if ($response->successful()) {
-            return redirect()->route('users.index')->with('success', 'Usuario creado');
-        }
-
-        return back()->withErrors(['error' => $response->json('message') ?? 'Error en la API']);
-    }
 
     public function showLogin()
     {

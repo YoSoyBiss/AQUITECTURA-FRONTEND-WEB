@@ -41,7 +41,6 @@
       box-sizing: border-box;
     }
 
-    /* Contenedor para input con botón ojito */
     .password-wrapper {
       position: relative;
     }
@@ -156,9 +155,12 @@
 
       <label for="role">Rol:</label>
       <select id="role" name="role" required>
-        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-        <option value="seller" {{ old('role') == 'seller' ? 'selected' : '' }}>Vendedor</option>
-        <option value="consultant" {{ old('role') == 'consultant' ? 'selected' : '' }}>Consultor</option>
+        <option value="">-- Selecciona un rol --</option>
+        @foreach ($roles as $role)
+          <option value="{{ $role['_id'] }}" {{ old('role') == $role['_id'] ? 'selected' : '' }}>
+            {{ ucfirst($role['name']) }}
+          </option>
+        @endforeach
       </select>
 
       <button type="submit" class="btn">Guardar Usuario</button>
@@ -167,14 +169,12 @@
     <a href="{{ url('/users') }}" class="back-link">← Volver a la lista de usuarios</a>
   </div>
 
-  <!-- Modal de éxito -->
   <div id="successModal">
     <h2>✅ Usuario creado exitosamente</h2>
     <button onclick="goToUsers()">Continuar</button>
   </div>
 
   <script>
-    // Toggle para contraseña
     const togglePassword = document.querySelector('#togglePassword');
     const password = document.querySelector('#password');
     togglePassword.addEventListener('click', () => {
@@ -183,7 +183,6 @@
       togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
     });
 
-    // Toggle para confirmar contraseña
     const togglePasswordConfirm = document.querySelector('#togglePasswordConfirm');
     const passwordConfirm = document.querySelector('#password_confirmation');
     togglePasswordConfirm.addEventListener('click', () => {

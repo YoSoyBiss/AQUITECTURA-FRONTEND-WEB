@@ -4,6 +4,7 @@ use App\Http\Controllers\ProductWebController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserApiController;
+use App\Http\Controllers\RouteApiController;
 
 //pdf ruta para descarga 
 
@@ -70,3 +71,12 @@ Route::get('/dashboard', [UserApiController::class, 'redireccionarPorRol'])->nam
 Route::view('/dashboard/admin', 'dashboard.admin')->name('dashboard.admin');
 Route::view('/dashboard/seller', 'dashboard.seller')->name('dashboard.seller');
 Route::view('/dashboard/consultant', 'dashboard.consultant')->name('dashboard.consultant');
+
+
+// CRUD de roles
+Route::get('/roles', [RoleApiController::class, 'index'])->name('roles.index');
+Route::get('/roles/create', [RoleApiController::class, 'create'])->name('roles.create');
+Route::post('/roles', [RoleApiController::class, 'store'])->name('roles.store');
+Route::get('/roles/{id}/edit', [RoleApiController::class, 'edit'])->name('roles.edit');
+Route::put('/roles/{id}', [RoleApiController::class, 'update'])->name('roles.update');
+Route::delete('/roles/{id}', [RoleApiController::class, 'destroy'])->name('roles.destroy');
