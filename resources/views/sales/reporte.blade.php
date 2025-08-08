@@ -43,10 +43,25 @@
       text-align: right;
       margin-top: 30px;
     }
+    .container {
+            max-width: 1000px; margin: auto; background: #a7b5deff;
+            padding: 30px; border-radius: 10px;
+            box-shadow: 0 0 10px rgba(90, 62, 54, 0.2);
+        }
+    .add-button {
+        display: inline-block; margin-bottom: 20px; padding: 10px 20px;
+        background-color: #8d6e63; color: white;
+        text-decoration: none; border-radius: 5px;
+        font-weight: bold; transition: background-color 0.3s ease;
+    }
   </style>
 </head>
 <body>
-  <h1>Reporte de Ventas por Usuario</h1>
+  <div class="container">
+    <h1>Reporte de Ventas por Usuario</h1>
+    <div class="top-bar">
+    <a href="{{ route('dashboard.redirect') }}" class="add-button" style="margin-right: auto;">🏠📚 Menu principal</a>
+</div>
 
   @php
     $ventasPorUsuario = [];

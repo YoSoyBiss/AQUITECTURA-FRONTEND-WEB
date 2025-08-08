@@ -59,12 +59,25 @@
             background-color: #218838;
         }
 
+        .btn-disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
         .alert-success {
             background-color: #d4edda;
             padding: 10px;
             color: #155724;
             margin-bottom: 15px;
             border-radius: 4px;
+        }
+        .add-button {
+            display: inline-block; margin-bottom: 20px; padding: 10px 20px;
+            background-color: #8d6e63; color: white;
+            text-decoration: none; border-radius: 5px;
+            font-weight: bold; transition: background-color 0.3s ease;
         }
 
         .alert-error {
@@ -80,6 +93,9 @@
 <div class="container">
     <h1>Lista de Ventas</h1>
 
+    {{-- DEBUG TEMPORAL: Mostrar rol actual --}}
+    <p><strong>Rol actual:</strong> {{ session('user_role') ?? 'no definido' }}</p>
+
     @if (session('success'))
         <div class="alert-success">{{ session('success') }}</div>
     @endif
@@ -88,7 +104,14 @@
         <div class="alert-error">{{ $errors->first() }}</div>
     @endif
 
-    <a class="btn-create" href="{{ route('sales.createsales') }}">+ Crear Nueva Venta</a>
+    {{-- Botón habilitado solo si el usuario es admin --}}
+    @if (session('user_role') === 'admin' || session('user_role') === 'seller')
+        <a class="btn-create" href="{{ route('sales.createsales') }}">+ Crear Nueva Venta</a>
+    @else
+        <button class="btn-create btn-disabled" disabled title="Solo administradores pueden crear ventas">+ Crear Nueva Venta</button>
+    @endif
+    
+    <a href="{{ route('dashboard.redirect') }}" class="add-button" style="margin-right: auto;">🏠📚 Menu principal</a>
 
     <table>
         <thead>

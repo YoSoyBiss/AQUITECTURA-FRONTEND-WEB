@@ -23,6 +23,7 @@ Route::get('/reporte-ventas', [SalesController::class, 'reporte'])->name('sales.
 // Listar productos (llama a la API para obtener productos)
 Route::get('/products', [ProductWebController::class, 'index'])->name('products.index');
 
+
 // Mostrar formulario para crear un producto
 Route::get('/products/create', [ProductWebController::class, 'create'])->name('products.create');
 

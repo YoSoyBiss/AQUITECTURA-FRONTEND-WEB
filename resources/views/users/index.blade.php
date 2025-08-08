@@ -114,14 +114,25 @@
       border-radius: 5px;
       color: #900;
     }
+    .add-button {
+            display: inline-block; margin-bottom: 20px; padding: 10px 20px;
+            background-color: #8d6e63; color: white;
+            text-decoration: none; border-radius: 5px;
+            font-weight: bold; transition: background-color 0.3s ease;
+        }
+    .button-group {
+  display: flex;
+  gap: 10px;
+}
   </style>
   <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
 
   <div class="container">
-    <div class="top-bar">
       <h1>Lista de Usuarios</h1>
+          <div class="button-group">
+          <a href="{{ route('dashboard.redirect') }}" class="add-button">🏠📚 Menu principal</a>
       <a href="{{ route('users.create') }}" class="add-button">+ Agregar Usuario</a>
     </div>
 
