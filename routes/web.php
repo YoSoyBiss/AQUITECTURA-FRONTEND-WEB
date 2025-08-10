@@ -6,6 +6,29 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserApiController;
 use App\Http\Controllers\RouteApiController;
 
+
+use App\Http\Controllers\CatalogosWebController;
+
+Route::prefix('catalogos')->group(function () {
+    Route::get('/', [CatalogosWebController::class, 'index'])->name('catalogs.index');
+
+    // Publishers
+    Route::post('/publishers',         [CatalogosWebController::class, 'storePublisher'])->name('catalogs.publishers.store');
+    Route::put('/publishers/{id}',     [CatalogosWebController::class, 'updatePublisher'])->name('catalogs.publishers.update');
+    Route::delete('/publishers/{id}',  [CatalogosWebController::class, 'destroyPublisher'])->name('catalogs.publishers.destroy');
+
+    // Authors
+    Route::post('/authors',            [CatalogosWebController::class, 'storeAuthor'])->name('catalogs.authors.store');
+    Route::put('/authors/{id}',        [CatalogosWebController::class, 'updateAuthor'])->name('catalogs.authors.update');
+    Route::delete('/authors/{id}',     [CatalogosWebController::class, 'destroyAuthor'])->name('catalogs.authors.destroy');
+
+    // Genres
+    Route::post('/genres',             [CatalogosWebController::class, 'storeGenre'])->name('catalogs.genres.store');
+    Route::put('/genres/{id}',         [CatalogosWebController::class, 'updateGenre'])->name('catalogs.genres.update');
+    Route::delete('/genres/{id}',      [CatalogosWebController::class, 'destroyGenre'])->name('catalogs.genres.destroy');
+});
+
+
 //pdf ruta para descarga 
 
 Route::get('/reporte-ventas/pdf', [SalesController::class, 'descargarPDF'])->name('sales.report.pdf');
