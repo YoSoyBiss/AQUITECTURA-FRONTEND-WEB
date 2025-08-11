@@ -4,6 +4,7 @@ use App\Http\Controllers\ProductWebController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserApiController;
+use App\Http\Controllers\RoleApiController;
 use App\Http\Controllers\RouteApiController;
 
 //pdf ruta para descarga 

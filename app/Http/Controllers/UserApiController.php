@@ -23,14 +23,17 @@ public function __construct()
         return view('users.index', compact('users'));
     }
 
-  public function create()
+public function create()
 {
     $rolesResponse = Http::get(env('ROLES_API_URL', 'http://localhost:5000/api/roles'));
 
     $roles = $rolesResponse->successful() ? $rolesResponse->json() : [];
 
+
+
     return view('users.create', compact('roles'));
 }
+
 
 
    public function store(Request $request)
@@ -84,23 +87,38 @@ public function __construct()
 
     public function edit($id)
 {
+    // Obtener usuario desde API o base de datos
     $response = Http::get("{$this->usersApi}/{$id}");
-
     if (!$response->successful()) {
-        return redirect()->route('users.index')->withErrors(['error' => 'Usuario no encontrado']);
+        abort(404, 'Usuario no encontrado');
     }
-
     $user = $response->json();
-    return view('users.edit', compact('user'));
+
+    // Obtener roles para el dropdown
+    $rolesResponse = Http::get(env('ROLES_API_URL', 'http://localhost:5000/api/roles'));
+    $roles = $rolesResponse->successful() ? $rolesResponse->json() : [];
+
+    return view('users.edit', compact('user', 'roles'));
 }
+
 
 
   public function update(Request $request, $id)
 {
+    // Validación básica
+    $request->validate([
+        'name' => 'required|string',
+        'role' => 'required|string',
+        'password' => 'nullable|string|min:6|confirmed', // password puede ser opcional, y si se envía debe confirmarse
+    ]);
 
+    // Tomar solo lo que viene, excepto password si está vacío
+    $data = $request->only(['name', 'role']);
 
-    $data = $request->only(['name', 'password', 'role']);
-
+    if ($request->filled('password')) {
+        $data['password'] = $request->input('password');
+        // Para confirmar la password, necesitas agregar un campo 'password_confirmation' en el form si no lo tienes.
+    }
 
     $response = Http::put("{$this->usersApi}/{$id}", $data);
 
@@ -110,6 +128,7 @@ public function __construct()
 
     return back()->withErrors(['error' => 'Error al actualizar usuario']);
 }
+
 
 
 

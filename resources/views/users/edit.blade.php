@@ -83,6 +83,10 @@
       </div>
     @endif
 
+    @php
+      $userRoleId = old('role', data_get($user, 'role._id', $user['role'] ?? ''));
+    @endphp
+
     <form id="editForm" method="POST" action="{{ url('/users/' . ($user['id'] ?? $user['_id'])) }}">
       @csrf
       @method('PUT')
@@ -106,9 +110,12 @@
 
       <label for="role">Rol:</label>
       <select id="role" name="role" required>
-        <option value="admin" {{ (old('role', $user['role']) == 'admin') ? 'selected' : '' }}>Admin</option>
-        <option value="seller" {{ (old('role', $user['role']) == 'seller') ? 'selected' : '' }}>Vendedor</option>
-        <option value="consultant" {{ (old('role', $user['role']) == 'consultant') ? 'selected' : '' }}>Consultor</option>
+        <option value="">-- Selecciona un rol --</option>
+        @foreach ($roles as $role)
+          <option value="{{ $role['_id'] }}" {{ $userRoleId == $role['_id'] ? 'selected' : '' }}>
+            {{ ucfirst($role['name']) }}
+          </option>
+        @endforeach
       </select>
 
       <button type="submit">Actualizar Usuario</button>

@@ -163,7 +163,7 @@
           <tr id="row-{{ $user['id'] ?? $user['_id'] }}">
             <td>{{ $user['name'] }}</td>
             <td>{{ $user['email'] ?? '-' }}</td>
-            <td>{{ $user['role'] }}</td>
+            <td>{{ $user['role']['name'] ?? 'Sin rol' }}</td>
             <td>
               <a href="{{ url('/users/edit/' . ($user['id'] ?? $user['_id'])) }}" class="action-button">Editar</a>
             </td>
