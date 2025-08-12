@@ -62,6 +62,7 @@ public function create()
 
    public function login(Request $request)
 {
+    
     $data = $request->validate([
         'email' => 'required|email',
         'password' => 'required|string',
