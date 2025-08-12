@@ -105,3 +105,4 @@ Route::post('/roles', [RoleApiController::class, 'store'])->name('roles.store');
 Route::get('/roles/{id}/edit', [RoleApiController::class, 'edit'])->name('roles.edit');
 Route::put('/roles/{id}', [RoleApiController::class, 'update'])->name('roles.update');
 Route::delete('/roles/{id}', [RoleApiController::class, 'destroy'])->name('roles.destroy');
+//gjdhgds
