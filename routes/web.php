@@ -10,6 +10,12 @@ use App\Http\Controllers\RouteApiController;
 
 use App\Http\Controllers\CatalogosWebController;
 
+
+Route::get('/start', [UserApiController::class, 'showStart'])->name('start.show');
+Route::post('/start/select', [UserApiController::class, 'selectStartRole'])->name('start.select');
+
+
+
 Route::prefix('catalogos')->group(function () {
     Route::get('/', [CatalogosWebController::class, 'index'])->name('catalogs.index');
 

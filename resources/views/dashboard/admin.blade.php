@@ -103,6 +103,9 @@
             <a href="{{ route('sales.index') }}" class="menu-item">
                 <img src="/car.png" alt="Compras"> Gestión de compras
             </a>
+            <a href="{{ route('sales.reporte') }}" class="menu-item">
+            <img src="/reporte.png" alt="Reporte"> Ver Reporte
+            </a>
 
             {{-- Logout --}}
             <form method="POST" action="{{ route('logout') }}">

@@ -111,6 +111,20 @@
       </div>
     @endif
 
+    @if(session('intended_role'))
+  <div class="alert alert-secondary mb-3">
+    <strong>Rol elegido:</strong> {{ session('intended_role') }}
+  </div>
+@endif
+@if(session('debug_role_name'))
+  <div class="alert alert-info mb-3">
+    <strong>Rol detectado por API:</strong> {{ session('debug_role_name') }}
+  </div>
+@endif
+@if($errors->any())
+  <div class="alert alert-danger">{{ $errors->first() }}</div>
+@endif
+
     {{-- Mensajes de sesión --}}
     @if (session('error'))
       <div class="error-message">{{ session('error') }}</div>
