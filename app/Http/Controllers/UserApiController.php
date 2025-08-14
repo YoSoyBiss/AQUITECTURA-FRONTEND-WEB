@@ -60,9 +60,8 @@ public function create()
         return view('users.login');
     }
 
-   public function login(Request $request)
+public function login(Request $request)
 {
-    
     $data = $request->validate([
         'email' => 'required|email',
         'password' => 'required|string',
@@ -70,21 +69,53 @@ public function create()
 
     $response = Http::post("{$this->authApi}/login", $data);
 
-    if ($response->successful()) {
-    $user = $response->json('user');
+    if (!$response->successful()) {
+        return back()->withErrors(['error' => $response->json('message') ?? 'Credenciales incorrectas']);
+    }
 
+    $json = $response->json();
+    $user = $json['user'] ?? null;
+
+    if (!$user) {
+        return back()->withErrors(['error' => 'No se recibió información de usuario']);
+    }
+
+    // Normalizar rol
+    $roleValue = $user['role'] ?? null;
+    $roleName = is_array($roleValue) ? ($roleValue['name'] ?? null) : $roleValue;
+    $roleName = $roleName ? strtolower(trim($roleName)) : null;
+
+    // Validar rol elegido en Start
+    $intended = session('intended_role');
+    if ($intended) {
+        $allowed = false;
+
+        if ($intended === 'otros') {
+            $allowed = !in_array($roleName, ['admin', 'seller', 'consultant'], true);
+        } else {
+            $allowed = ($roleName === $intended);
+        }
+
+        if (!$allowed) {
+            return redirect()
+                ->route('users.login')
+                ->withErrors(['error' => "No puedes entrar como '{$intended}' con una cuenta '{$roleName}'."])
+                ->withInput();
+        }
+    }
+
+    // Guardar en sesión
     session([
-        'api_token'  => $response->json('token'),  // si tienes token
-        'user_name'  => $user['name'],
-        'user_role'  => $user['role'],
+        'user_name' => $user['name'] ?? '',
+        'user_role' => $roleName,
+        'user_id'   => $user['_id'] ?? ($user['id'] ?? null),
     ]);
+
+    session()->forget('intended_role');
 
     return redirect()->route('dashboard.redirect');
 }
 
-
-    return back()->withErrors(['error' => $response->json('message') ?? 'Credenciales incorrectas']);
-}
 
     public function edit($id)
 {
@@ -198,7 +229,29 @@ public function logout(Request $request)
     return redirect('/login')->with('success', 'Sesión cerrada');
 }
 
+public function showStart()
+{
+    // Opcional: si ya está logueado, puedes mandarlo directo al dashboard
+    if (session('api_token')) {
+        return redirect()->route('dashboard.redirect');
+    }
+
+    // Si ya había un intended_role, muéstralo (por UX)
+    $intended = session('intended_role');
+    return view('users.start', compact('intended'));
+}
+
+public function selectStartRole(Request $request)
+{
+    $data = $request->validate([
+        'role' => 'required|string|in:admin,seller,consultant,otros'
+    ]);
+
+    session(['intended_role' => $data['role']]);
+
+    // Luego de elegir rol, vamos a login
+    return redirect()->route('users.login')->with('success', 'Seleccionaste: ' . $data['role']);
+}
 
 
 }
-
