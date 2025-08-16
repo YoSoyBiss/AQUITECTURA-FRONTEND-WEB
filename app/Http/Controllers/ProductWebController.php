@@ -26,11 +26,11 @@ class ProductWebController extends Controller
         $authorIds = is_array($authorIds) ? $authorIds : [$authorIds];
         $genreIds  = is_array($genreIds)  ? $genreIds  : [$genreIds];
 
-        // Limpiar vacíos
+        // Limpiar vacíos numéricos
         $authorIds = array_values(array_filter($authorIds, fn($v)=>is_numeric($v)));
         $genreIds  = array_values(array_filter($genreIds,  fn($v)=>is_numeric($v)));
 
-        // Reenviar a la API
+        // Query a la API
         $query = array_filter([
             'q'            => $q,
             'author_ids'   => $authorIds ?: null,
@@ -41,8 +41,9 @@ class ProductWebController extends Controller
         $response = Http::get("{$this->apiBase}/products", $query);
         $products = ($response->successful() && is_array($response->json())) ? $response->json() : [];
 
+        // Elegir vista según rol (por si abren /products logueados como consultor)
         $view = match (session('user_role')) {
-            'consultant' => 'products.indexv',
+            'consultant' => 'products.indexcon',
             default      => 'products.index',
         };
 
@@ -68,7 +69,6 @@ class ProductWebController extends Controller
         $genres     = Http::get("{$this->apiBase}/genres")->json()      ?? [];
         $publishers = Http::get("{$this->apiBase}/publishers")->json()  ?? [];
 
-        // normalizar posibles formatos {data:[...]}
         $authors    = ($authors['data'] ?? $authors);
         $genres     = ($genres['data'] ?? $genres);
         $publishers = ($publishers['data'] ?? $publishers);
@@ -78,7 +78,6 @@ class ProductWebController extends Controller
 
     public function store(Request $request)
     {
-        // Validación del producto (incluye preciodeproveedor)
         $validated = $request->validate([
             'title'             => 'required|string|max:255',
             'publisher_id'      => 'required|integer',
@@ -87,13 +86,11 @@ class ProductWebController extends Controller
             'preciodeproveedor' => 'nullable|numeric|min:0',
         ]);
 
-        // Normalizar relaciones
         $authorIds = $request->input('author_ids', []);
         $genreIds  = $request->input('genre_ids',  []);
         $authorIds = is_array($authorIds) ? $authorIds : [$authorIds];
         $genreIds  = is_array($genreIds)  ? $genreIds  : [$genreIds];
 
-        // Normalizar imágenes
         $images = $request->input('images', null);
         if (is_array($images)) {
             $images = array_values(array_filter($images, fn($img) =>
@@ -101,14 +98,12 @@ class ProductWebController extends Controller
             ));
         }
 
-        // payload hacia el API de productos
         $payload = array_merge($validated, [
             'author_ids' => $authorIds ?: null,
             'genre_ids'  => $genreIds  ?: null,
             'images'     => $images    ?: null,
         ]);
 
-        // Crear producto (+ preciodeproveedor si viene)
         $resp = Http::post("{$this->apiBase}/products", $payload);
         if ($resp->failed()) {
             $apiErrors = $resp->json('errors') ?? ['api' => ['No se pudo guardar el producto.']];
@@ -178,5 +173,51 @@ class ProductWebController extends Controller
     {
         Http::delete("{$this->apiBase}/products/{$id}");
         return redirect()->route('products.index')->with('ok','Producto eliminado');
+    }
+
+    // GET /products/consult (vista SOLO CONSULTA)
+    public function indexConsult(Request $request)
+    {
+        // Reusar misma lógica de filtros que en index()
+        $authors    = Http::get("{$this->apiBase}/authors")->json()     ?? [];
+        $genres     = Http::get("{$this->apiBase}/genres")->json()      ?? [];
+        $publishers = Http::get("{$this->apiBase}/publishers")->json()  ?? [];
+
+        $q           = $request->query('q');
+        $authorIds   = $request->query('author_ids', []);
+        $genreIds    = $request->query('genre_ids',  []);
+        $publisherId = $request->query('publisher_id');
+
+        $authorIds = is_array($authorIds) ? $authorIds : [$authorIds];
+        $genreIds  = is_array($genreIds)  ? $genreIds  : [$genreIds];
+
+        $authorIds = array_values(array_filter($authorIds, fn($v)=>is_numeric($v)));
+        $genreIds  = array_values(array_filter($genreIds,  fn($v)=>is_numeric($v)));
+
+        $query = array_filter([
+            'q'            => $q,
+            'author_ids'   => $authorIds ?: null,
+            'genre_ids'    => $genreIds  ?: null,
+            'publisher_id' => $publisherId ?: null,
+        ], fn($v) => !is_null($v));
+
+        $response = Http::get("{$this->apiBase}/products", $query);
+        $products = ($response->successful() && is_array($response->json())) ? $response->json() : [];
+
+        // Forzar la vista de consultores (solo lectura, sin CRUD)
+        return view('products.indexcon', [
+            'products'   => $products,
+            'authors'    => ($authors['data'] ?? $authors),
+            'genres'     => ($genres['data'] ?? $genres),
+            'publishers' => ($publishers['data'] ?? $publishers),
+            'filters'    => [
+                'q'            => $q,
+                'author_ids'   => $authorIds,
+                'genre_ids'    => $genreIds,
+                'publisher_id' => $publisherId,
+            ],
+        ])->withErrors($response->successful() ? [] : [
+            'api' => 'No se pudieron obtener los productos (estado: '.$response->status().')'
+        ]);
     }
 }

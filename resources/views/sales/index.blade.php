@@ -85,7 +85,6 @@
             
                 <a class="btn btn-primary" href="{{ route('sales.createsales') }}">+ Crear Nueva Venta</a>
            
-                <button class="btn btn-primary btn-disabled" disabled title="Solo administradores o vendedores pueden crear ventas">+ Crear Nueva Venta</button>
             
 
             <a href="{{ route('dashboard.redirect') }}" class="add-button">🏠📚 Menú principal</a>
