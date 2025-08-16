@@ -91,16 +91,12 @@
 <div class="container">
     <h1>Bienvenido, {{ session('user_name') ?? 'Consultor' }}</h1>
     <div class="menu">
-        <a href="{{ route('products.index') }}" class="menu-item">
-            <img src="/prodc.png" alt="Productos"> Gestión de Productos
+        <a href="{{ route('products.indexcon') }}" class="menu-item">
+            <img src="/prodc.png" alt="Productos"> Vista de Productos
         </a>
-        <a href="{{ route('sales.index') }}" class="menu-item">
+        <a href="{{ route('sales.consultants') }}" class="menu-item">
             <img src="/car.png" alt="Compras"> Gestión de Compras
         </a>
-        <a href="{{ route('sales.reporte') }}" class="menu-item">
-            <img src="/reporte.png" alt="Reporte"> Ver Reporte
-        </a>
-
         {{-- Logout --}}
         <form action="{{ route('logout') }}" method="POST">
             @csrf

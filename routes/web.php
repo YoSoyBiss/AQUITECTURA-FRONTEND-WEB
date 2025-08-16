@@ -7,9 +7,9 @@ use App\Http\Controllers\UserApiController;
 use App\Http\Controllers\RoleApiController;
 use App\Http\Controllers\RouteApiController;
 
-
 use App\Http\Controllers\CatalogosWebController;
 
+Route::get('/sales/consultants', [SalesController::class, 'consultants'])->name('sales.consultants');
 
 Route::get('/start', [UserApiController::class, 'showStart'])->name('start.show');
 Route::post('/start/select', [UserApiController::class, 'selectStartRole'])->name('start.select');
@@ -69,6 +69,8 @@ Route::put('/products/{id}', [ProductWebController::class, 'update'])->name('pro
 // Eliminar producto específico (envía petición a la API)
 Route::delete('/products/{id}', [ProductWebController::class, 'destroy'])->name('products.destroy');
 
+
+Route::get('/products/consult', [ProductWebController::class, 'indexConsult'])->name('products.indexcon');
 Route::prefix('sales')->group(function () {
     Route::get('/', [SalesController::class, 'index'])->name('sales.index');               // Ver lista de ventas
     Route::get('/create', [SalesController::class, 'create'])->name('sales.createsales');  // Mostrar formulario

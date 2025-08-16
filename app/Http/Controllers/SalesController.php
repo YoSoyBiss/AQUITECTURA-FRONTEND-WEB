@@ -10,6 +10,16 @@ class SalesController extends Controller
 {
     private $apiBase = 'http://localhost:5000/api/sales';
 
+    public function consultants()
+{
+    // 🔹 Aquí podrías traer productos de la API de productos
+    $response = Http::get('http://localhost:8000/api/products');
+    $products = $response->successful() ? $response->json() : [];
+
+    // 🔹 Y pasar los productos a la vista de catálogo para consultantes
+    return view('sales.consultants', compact('products'));
+}
+
     public function index()
     {
         $response = Http::get($this->apiBase);
