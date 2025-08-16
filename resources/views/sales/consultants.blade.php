@@ -198,7 +198,7 @@
         <section class="gallery">
             <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" alt="Libros 1">
             <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794" alt="Libros 2">
-            <img src="https://images.unsplash.com/photo-1528207776546-365bb710ee93" alt="Libros 3">
+            <img src="https://static01.nyt.com/images/2018/07/12/universal/es/LIBRERIASESPA1206/LIBRERIASESPA1206-superJumbo.jpg" alt="Libros 3">
             <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353" alt="Libros 4">
         </section>
     </main>
