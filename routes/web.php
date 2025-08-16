@@ -6,9 +6,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserApiController;
 use App\Http\Controllers\RoleApiController;
 use App\Http\Controllers\RouteApiController;
-
-
 use App\Http\Controllers\CatalogosWebController;
+
 
 
 Route::get('/start', [UserApiController::class, 'showStart'])->name('start.show');
