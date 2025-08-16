@@ -9,7 +9,8 @@ use App\Http\Controllers\RouteApiController;
 
 use App\Http\Controllers\CatalogosWebController;
 
-Route::get('/sales/consultants', [SalesController::class, 'consultants'])->name('sales.consultants');
+Route::get('/sales/consultants', [SalesController::class, 'consultants'])
+    ->name('sales.consultants');
 
 Route::get('/start', [UserApiController::class, 'showStart'])->name('start.show');
 Route::post('/start/select', [UserApiController::class, 'selectStartRole'])->name('start.select');
