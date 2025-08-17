@@ -243,9 +243,10 @@
         <div class="card" style="padding:12px">
           <h4 style="margin:8px 0">Notas</h4>
           <ul class="muted">
-            <li>La ganancia se calcula por producto usando costo (si disponible) o el margen configurado.</li>
-            <li>Puedes pasar <code>$profitMargin</code> desde el controlador (ej. <code>0.25</code> para 25%).</li>
-            <li>Para nombres de productos, pasa <code>$productsById[productId]['title']</code>.</li>
+            <li>La ganancia se saca por producto usando el costo (si lo hay) o el margen que hayas puesto.</li>
+<li>Desde el controlador puedes mandar <code>$profitMargin</code> (por ejemplo, <code>0.25</code> para un 25%).</li>
+<li>Si necesitas el nombre del producto, usa <code>$productsById[productId]['title']</code>.</li>
+
           </ul>
         </div>
       </div>

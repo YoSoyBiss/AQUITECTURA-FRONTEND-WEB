@@ -95,7 +95,7 @@
             <img src="/prodc.png" alt="Productos"> Vista de Productos
         </a>
         <a href="{{ route('sales.consultants') }}" class="menu-item">
-            <img src="/car.png" alt="Compras"> Gestión de Compras
+            <img src="/car.png" alt="Compras"> Comunicate con nosotros
         </a>
         {{-- Logout --}}
         <form action="{{ route('logout') }}" method="POST">

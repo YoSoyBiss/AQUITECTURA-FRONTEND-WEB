@@ -159,6 +159,7 @@
                     <a class="btn btn-light" href="{{ route('products.index') }}">Limpiar</a>
                     <a class="add-button" href="{{ route('products.create') }}">+ Nuevo producto</a>
                     <a class="add-button" href="{{ route('catalogs.index') }}">Catalogo</a>
+                    <a href="{{ route('dashboard.redirect') }}" class="add-button">🏠📚 Menu principal</a>
                 </div>
                 
             </div>

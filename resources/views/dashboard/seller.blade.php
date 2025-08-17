@@ -96,7 +96,7 @@
                 <img src="/prodc.png" alt="Ver Productos"> Ver Productos
             </a>
             <a href="{{ route('sales.index') }}" class="menu-item">
-                <img src="/car.png" alt="Mis Compras"> Mis Compras
+                <img src="/car.png" alt="Mis Compras"> A las Compras
             </a>
 
             {{-- Logout --}}

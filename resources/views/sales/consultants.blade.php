@@ -173,8 +173,8 @@
     <div class="divider"></div>
 
     <header>
-        <h1>Comunícate con Nosotros</h1>
-        <p>Estamos listos para ayudarte 📚</p>
+        <h1>Comunícate con Nosotros "LIBRERIA JAZMIN"</h1>
+        <p>Estamos listos para ayudarte o contratarte 📚</p>
     </header>
 
     <main>

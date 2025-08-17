@@ -15,8 +15,6 @@ Route::get('/sales/consultants', [SalesController::class, 'consultants'])
 Route::get('/start', [UserApiController::class, 'showStart'])->name('start.show');
 Route::post('/start/select', [UserApiController::class, 'selectStartRole'])->name('start.select');
 
-
-
 Route::prefix('catalogos')->group(function () {
     Route::get('/', [CatalogosWebController::class, 'index'])->name('catalogs.index');
 
@@ -36,24 +34,18 @@ Route::prefix('catalogos')->group(function () {
     Route::delete('/genres/{id}',      [CatalogosWebController::class, 'destroyGenre'])->name('catalogs.genres.destroy');
 });
 
-
 //pdf ruta para descarga 
-
 Route::get('/reporte-ventas/pdf', [SalesController::class, 'descargarPDF'])->name('sales.report.pdf');
 
-
-
-// Ruta raíz
+// Ruta raíz -> redirigir a /start
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('start.show');
 });
 
 Route::get('/reporte-ventas', [SalesController::class, 'reporte'])->name('sales.reporte');
 
-
 // Listar productos (llama a la API para obtener productos)
 Route::get('/products', [ProductWebController::class, 'index'])->name('products.index');
-
 
 // Mostrar formulario para crear un producto
 Route::get('/products/create', [ProductWebController::class, 'create'])->name('products.create');
@@ -69,7 +61,6 @@ Route::put('/products/{id}', [ProductWebController::class, 'update'])->name('pro
 
 // Eliminar producto específico (envía petición a la API)
 Route::delete('/products/{id}', [ProductWebController::class, 'destroy'])->name('products.destroy');
-
 
 Route::get('/products/consult', [ProductWebController::class, 'indexConsult'])->name('products.indexcon');
 Route::prefix('sales')->group(function () {
@@ -106,7 +97,6 @@ Route::view('/dashboard/admin', 'dashboard.admin')->name('dashboard.admin');
 Route::view('/dashboard/seller', 'dashboard.seller')->name('dashboard.seller');
 Route::view('/dashboard/consultant', 'dashboard.consultant')->name('dashboard.consultant');
 
-
 // CRUD de roles
 Route::get('/roles', [RoleApiController::class, 'index'])->name('roles.index');
 Route::get('/roles/create', [RoleApiController::class, 'create'])->name('roles.create');
@@ -115,3 +105,5 @@ Route::get('/roles/{id}/edit', [RoleApiController::class, 'edit'])->name('roles.
 Route::put('/roles/{id}', [RoleApiController::class, 'update'])->name('roles.update');
 Route::delete('/roles/{id}', [RoleApiController::class, 'destroy'])->name('roles.destroy');
 //gjdhgds
+Route::post('/users/verify-password', [App\Http\Controllers\UserApiController::class, 'verifyPassword'])
+    ->name('users.verifyPassword');
