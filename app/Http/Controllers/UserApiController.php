@@ -13,7 +13,7 @@ class UserApiController extends Controller
     public function __construct()
     {
         $this->usersApi = env('USERS_API_URL', 'http://localhost:5000/api/users');
-        $this->authApi  = env('AUTH_API_URL',  'http://localhost:5000/api/users'); // /api/users
+        $this->authApi  = env('AUTH_API_URL',  'http://localhost:5000/api/users');
     }
 
     /** Normaliza strings de rol a uno de: admin | seller | consultant */
@@ -22,25 +22,22 @@ class UserApiController extends Controller
         if (!$raw) return null;
         $r = strtolower(trim($raw));
 
-        // mapeos flexibles
         $map = [
-            'admin'      => 'admin',
-            'administrator' => 'admin',
-            'superadmin' => 'admin',
-
-            'seller'     => 'seller',
-            'sales'      => 'seller',
-            'vendedor'   => 'seller',
-            'saller'     => 'seller',     // typo común
-            'seller_user'=> 'seller',
-
-            'consult'    => 'consultant',
-            'consultant' => 'consultant',
-            'consultor'  => 'consultant',
-            'consultant_user' => 'consultant',
+            'admin'          => 'admin',
+            'administrator'  => 'admin',
+            'superadmin'     => 'admin',
+            'seller'         => 'seller',
+            'sales'          => 'seller',
+            'vendedor'       => 'seller',
+            'saller'         => 'seller',
+            'seller_user'    => 'seller',
+            'consult'        => 'consultant',
+            'consultant'     => 'consultant',
+            'consultor'      => 'consultant',
+            'consultant_user'=> 'consultant',
         ];
 
-        return $map[$r] ?? $r; // si no está en mapa, regresa tal cual
+        return $map[$r] ?? $r;
     }
 
     public function index()
@@ -66,7 +63,6 @@ class UserApiController extends Controller
             'role'     => 'required|string'
         ]);
 
-        // Alta desde panel (admin): requiere rol explícito
         $response = Http::post("{$this->usersApi}/register", $data);
 
         if ($response->successful()) {
@@ -100,20 +96,16 @@ class UserApiController extends Controller
             return back()->withErrors(['error' => 'No se recibió información de usuario']);
         }
 
-        // Token si viene: api_token | token | access_token
         $token = $json['token'] ?? $json['access_token'] ?? $json['api_token'] ?? null;
 
-        // Normalización de rol
         $roleValue = $user['role'] ?? null;
         $roleName  = is_array($roleValue) ? ($roleValue['name'] ?? null) : $roleValue;
         $roleName  = $this->normalizeRole($roleName);
 
-        // Validar rol elegido anteriormente (flow de "Start")
         $intended = session('intended_role');
         if ($intended) {
             $allowed = false;
             if ($intended === 'otros') {
-                // "otros" = NO admin/seller/consultant
                 $allowed = !in_array($roleName, ['admin','seller','consultant'], true);
             } else {
                 $allowed = ($roleName === $this->normalizeRole($intended));
@@ -126,17 +118,17 @@ class UserApiController extends Controller
             }
         }
 
-        // Guardar en sesión
+        // --- CAMBIO CLAVE AQUÍ ---
+        // Se guarda el ID del usuario en la sesión usando 'id' en lugar de '_id'.
         session([
-            'api_token' => $token, // opcional si lo usas en peticiones
+            'api_token' => $token,
             'user_name' => $user['name'] ?? '',
             'user_role' => $roleName,
-            'user_id'   => $user['_id'] ?? ($user['id'] ?? null),
+            'user_id'   => $user['id'] ?? null, // Usa 'id' si tu API lo regresa así
         ]);
 
         session()->forget('intended_role');
 
-        // Redirección central
         return redirect()->route('dashboard.redirect');
     }
 
@@ -153,35 +145,32 @@ class UserApiController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    // Reglas base
-    $rules = [
-        'name' => 'required|string',
-        'role' => 'required|string',
-    ];
+    {
+        $rules = [
+            'name' => 'required|string',
+            'role' => 'required|string',
+        ];
 
-    // Si viene password, valida formato y que coincida con password_confirmation
-    if ($request->filled('password')) {
-        $rules['password'] = 'string|min:6';
-        $rules['password_confirmation'] = 'same:password'; // <- exige coincidencia solo si vino password
+        if ($request->filled('password')) {
+            $rules['password'] = 'string|min:6';
+            $rules['password_confirmation'] = 'same:password';
+        }
+
+        $validated = $request->validate($rules);
+
+        $data = $request->only(['name', 'role']);
+
+        if ($request->filled('password')) {
+            $data['password'] = $request->input('password');
+        }
+
+        $response = Http::put("{$this->usersApi}/{$id}", $data);
+
+        if ($response->successful()) {
+            return redirect()->route('users.index')->with('success', 'Usuario actualizado');
+        }
+        return back()->withErrors(['error' => 'Error al actualizar usuario']);
     }
-
-    $validated = $request->validate($rules);
-
-    $data = $request->only(['name', 'role']);
-
-    if ($request->filled('password')) {
-        $data['password'] = $request->input('password'); // la API de Node hashea
-    }
-
-    $response = Http::put("{$this->usersApi}/{$id}", $data);
-
-    if ($response->successful()) {
-        return redirect()->route('users.index')->with('success', 'Usuario actualizado');
-    }
-    return back()->withErrors(['error' => 'Error al actualizar usuario']);
-}
-
 
     public function destroy($id)
     {
@@ -198,40 +187,37 @@ class UserApiController extends Controller
     }
 
     public function submitRegister(Request $request)
-{
-    $data = $request->validate([
-        'name'     => 'required|string',
-        'email'    => 'required|email',
-        'password' => 'required|string|min:6|confirmed',
-    ]);
+    {
+        $data = $request->validate([
+            'name'     => 'required|string',
+            'email'    => 'required|email',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
 
-    // 1) Obtener el ID del rol consultant
-    $rolesUrl = env('ROLES_API_URL', 'http://localhost:5000/api/roles');
-    $rolesRes = Http::get($rolesUrl);
-    if (!$rolesRes->successful()) {
-        return back()->withErrors(['error' => 'No se pudieron cargar roles']);
+        $rolesUrl = env('ROLES_API_URL', 'http://localhost:5000/api/roles');
+        $rolesRes = Http::get($rolesUrl);
+        if (!$rolesRes->successful()) {
+            return back()->withErrors(['error' => 'No se pudieron cargar roles']);
+        }
+        $roles = $rolesRes->json();
+        $consultant = collect($roles)->first(fn ($r) => strcasecmp($r['name'] ?? '', 'consultant') === 0);
+        if (!$consultant) {
+            return back()->withErrors(['error' => 'No existe el rol consultant en la API']);
+        }
+
+        $payload = [
+            'name'     => $data['name'],
+            'email'    => $data['email'],
+            'password' => $data['password'],
+            'role'     => $consultant['_id'],
+        ];
+
+        $response = Http::post(env('AUTH_API_URL', 'http://localhost:5000/api/users').'/register', $payload);
+        if ($response->successful()) {
+            return redirect()->route('users.login')->with('success', 'Registro exitoso');
+        }
+        return back()->withErrors(['error' => $response->json('message') ?? 'Error al registrarse']);
     }
-    $roles = $rolesRes->json();
-    $consultant = collect($roles)->first(fn ($r) => strcasecmp($r['name'] ?? '', 'consultant') === 0);
-    if (!$consultant) {
-        return back()->withErrors(['error' => 'No existe el rol consultant en la API']);
-    }
-
-    // 2) Registrar enviando el _id del rol
-    $payload = [
-        'name'     => $data['name'],
-        'email'    => $data['email'],
-        'password' => $data['password'],
-        'role'     => $consultant['_id'], // ← ObjectId
-    ];
-
-    $response = Http::post(env('AUTH_API_URL', 'http://localhost:5000/api/users').'/register', $payload);
-    if ($response->successful()) {
-        return redirect()->route('users.login')->with('success', 'Registro exitoso');
-    }
-    return back()->withErrors(['error' => $response->json('message') ?? 'Error al registrarse']);
-}
-
 
     public function redireccionarPorRol()
     {
@@ -244,8 +230,8 @@ class UserApiController extends Controller
         }
 
         return match ($rol) {
-            'admin'      => view('dashboard.admin',      compact('nombre')),
-            'seller'     => view('dashboard.seller',     compact('nombre')),
+            'admin'      => view('dashboard.admin', compact('nombre')),
+            'seller'     => view('dashboard.seller', compact('nombre')),
             'consultant' => view('dashboard.consultant', compact('nombre')),
             'Otros', 'otros' => redirect()->route('sales.consultants'),
             default      => abort(403, 'Rol no reconocido'),
@@ -253,22 +239,17 @@ class UserApiController extends Controller
     }
 
     public function logout(Request $request)
-{
-    // Limpia variables que usabas
-    $request->session()->forget(['api_token', 'user_name', 'user_role', 'user_id', 'intended_role']);
+    {
+        $request->session()->forget(['api_token', 'user_name', 'user_role', 'user_id', 'intended_role']);
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-    // Invalida la sesión y regenera el token CSRF (práctica recomendada)
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-
-    // Redirige a la pantalla de inicio (start)
-    return redirect()->route('start.show')->with('success', 'Sesión cerrada');
-}
-
+        return redirect()->route('start.show')->with('success', 'Sesión cerrada');
+    }
 
     public function showStart()
     {
-        if (session('api_token')) {
+        if (session('user_id')) { // Usar user_id para verificar autenticación
             return redirect()->route('dashboard.redirect');
         }
         $intended = session('intended_role');
@@ -276,42 +257,36 @@ class UserApiController extends Controller
     }
 
     public function selectStartRole(Request $request)
-{
-    $data = $request->validate([
-        'role' => 'required|string|in:admin,seller,consultant,otros'
-    ]);
+    {
+        $data = $request->validate([
+            'role' => 'required|string|in:admin,seller,consultant,otros'
+        ]);
 
-    // Si elige "otros", lo mandamos directo a sales.consultants
-    if ($data['role'] === 'otros') {
-        // Por si existía algo previo:
-        $request->session()->forget('intended_role');
-        return redirect()->route('sales.consultants');
+        if ($data['role'] === 'otros') {
+            $request->session()->forget('intended_role');
+            return redirect()->route('sales.consultants');
+        }
+
+        session(['intended_role' => $data['role']]);
+        return redirect()->route('users.login')->with('success', 'Seleccionaste: ' . $data['role']);
     }
 
-    // Para los demás roles se mantiene el flujo normal (guardamos intención y vamos a login)
-    session(['intended_role' => $data['role']]);
-    return redirect()->route('users.login')->with('success', 'Seleccionaste: ' . $data['role']);
-}
+    public function verifyPassword(Request $request)
+    {
+        $data = $request->validate([
+            'email'    => 'required|email',
+            'password' => 'required|string',
+        ]);
 
-public function verifyPassword(Request $request)
-{
-    $data = $request->validate([
-        'email'    => 'required|email',
-        'password' => 'required|string',
-    ]);
+        $resp = Http::post(env('AUTH_API_URL', 'http://localhost:5000/api/users').'/login', $data);
 
-    // Reutilizamos el login de tu API externa
-    $resp = Http::post(env('AUTH_API_URL', 'http://localhost:5000/api/users').'/login', $data);
+        if ($resp->successful()) {
+            return response()->json(['valid' => true]);
+        }
 
-    if ($resp->successful()) {
-        return response()->json(['valid' => true]);
+        return response()->json([
+            'valid' => false,
+            'message' => $resp->json('message') ?? 'Credenciales inválidas'
+        ], 422);
     }
-
-    return response()->json([
-        'valid' => false,
-        'message' => $resp->json('message') ?? 'Credenciales inválidas'
-    ], 422);
-}
-
-
 }
