@@ -8,14 +8,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        if ($request->user()->role !== $role) {
-            return response()->json([
-                'message' => 'Unauthorized. You do not have access to this resource.',
-            ], 403);
-        }
+        $role = strtolower((string) session('user_role'));
+        $allowed = collect($roles)->map(fn($r)=>strtolower($r))->contains($role);
 
+        if (!$allowed) {
+            return redirect()->route('start.show')
+                ->withErrors(['error' => 'No tienes permiso para acceder a ventas.']);
+        }
         return $next($request);
     }
 }
