@@ -119,12 +119,13 @@ class UserApiController extends Controller
         }
 
         // --- CAMBIO CLAVE AQUÍ ---
-        // Se guarda el ID del usuario en la sesión usando 'id' en lugar de '_id'.
+        // Se corrige el orden para que busque el ID del usuario primero en '_id'
+        // y luego en 'id' si la primera opción no está disponible.
         session([
             'api_token' => $token,
             'user_name' => $user['name'] ?? '',
             'user_role' => $roleName,
-            'user_id'   => $user['id'] ?? null, // Usa 'id' si tu API lo regresa así
+            'user_id'   => $user['_id'] ?? ($user['id'] ?? null),
         ]);
 
         session()->forget('intended_role');

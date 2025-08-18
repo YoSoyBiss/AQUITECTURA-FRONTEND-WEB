@@ -96,10 +96,6 @@
   <div id="viewTabs">
     {{-- ===== Editoriales ===== --}}
     <section id="tab-publishers">
-      <div class="grid-two">
-        <input class="search" type="text" id="q_pub" placeholder="Buscar editorial...">
-        <button class="btn-light" type="button" onclick="clearSearch('q_pub')">Limpiar</button>
-      </div>
       <div class="card">
         <div class="card-head">
           <div class="card-title">
@@ -137,10 +133,6 @@
 
     {{-- ===== Autores ===== --}}
     <section id="tab-authors" class="hidden">
-      <div class="grid-two">
-        <input class="search" type="text" id="q_auth" placeholder="Buscar autor...">
-        <button class="btn-light" type="button" onclick="clearSearch('q_auth')">Limpiar</button>
-      </div>
       <div class="card">
         <div class="card-head">
           <div class="card-title">
@@ -178,10 +170,7 @@
 
     {{-- ===== Géneros ===== --}}
     <section id="tab-genres" class="hidden">
-      <div class="grid-two">
-        <input class="search" type="text" id="q_gen" placeholder="Buscar género...">
-        <button class="btn-light" type="button" onclick="clearSearch('q_gen')">Limpiar</button>
-      </div>
+      
       <div class="card">
         <div class="card-head">
           <div class="card-title">

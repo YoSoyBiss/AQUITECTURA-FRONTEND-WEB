@@ -3,7 +3,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<title>Catálogo de Productos — Consultores</title>
+<title>Catálogo de Productos — Publico General</title>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <style>
@@ -185,7 +185,7 @@
 
 <div class="hero">
   <div class="spark" aria-hidden="true"></div>
-  <h1>Catálogo — Vista para Consultores</h1>
+  <h1>Catálogo — Vista para Publico en General</h1>
   <p>Explora el inventario con filtros dinámicos y una galería de imágenes. No hay acciones de edición en esta vista.</p>
 </div>
 
@@ -204,7 +204,8 @@
 
   {{-- Filtros --}}
   <div class="filters-wrap">
-    <form id="filter-form" method="GET" action="{{ route('products.index') }}">
+    <!-- CAMBIO: action ahora apunta a products.indexcon -->
+    <form id="filter-form" method="GET" action="{{ route('products.indexcon') }}">
       <div class="filters">
         {{-- Nombre --}}
         <div>
@@ -266,7 +267,8 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M3 5h18v2H3zm4 6h10v2H7zm2 6h6v2H9z"/></svg>
             Buscar
           </button>
-          <a class="btn btn-light" href="{{ route('products.index') }}" title="Limpiar filtros">
+          <!-- CAMBIO: href ahora apunta a products.indexcon -->
+          <a class="btn btn-light" href="{{ route('products.indexcon') }}" title="Limpiar filtros">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="#4e342e" aria-hidden="true"><path d="M3 5h18v2H3zm0 6h12v2H3zm0 6h6v2H3z"/></svg>
             Limpiar
           </a>

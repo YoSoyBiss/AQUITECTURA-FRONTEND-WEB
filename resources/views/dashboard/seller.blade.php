@@ -92,7 +92,7 @@
         <h1>Bienvenido, {{ session('user_name') ?? 'Comprador' }}</h1>
 
         <div class="menu">
-            <a href="{{ route('products.index') }}" class="menu-item">
+            <a href="{{ route('products.indexcon') }}" class="menu-item">
                 <img src="/prodc.png" alt="Ver Productos"> Ver Productos
             </a>
             <a href="{{ route('sales.index') }}" class="menu-item">
