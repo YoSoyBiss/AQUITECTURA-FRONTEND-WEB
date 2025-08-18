@@ -100,6 +100,9 @@
             <a href="{{ route('users.index') }}" class="menu-item">
                 <img src="/user.png" alt="Usuarios"> Gestión de usuarios
             </a>
+            <a href="{{ route('roles.index') }}" class="menu-item">
+                <img src="/user.png" alt="Usuarios"> Gestión de roles
+            </a>
             <a href="{{ route('sales.index') }}" class="menu-item">
                 <img src="/car.png" alt="Compras"> Gestión de compras
             </a>
